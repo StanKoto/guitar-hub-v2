@@ -1,0 +1,55 @@
+<%- include('../partials/header'); %>
+  <main>
+    <form class="custom content update form" id="contents-form">
+      <label for="title">Title</label>
+      <textarea name="title" cols="30" rows="1" maxlength="50"><%= tip.title %></textarea>
+      <div class="title error"></div>
+      <label for="contents">Contents</label>
+      <textarea name="contents" cols="30" rows="10" maxlength="5000"><%= tip.contents %></textarea>
+      <div class="contents error"></div>
+      <br>
+      <div><p>Change tip category (current category:</p></div>
+      <div><p><%= tip.category %>):</p></div>
+      <br>
+      <span>
+        <input type="radio" id="category-one" name="category" value="Guitar, strings and accessories choice">
+        <label for="category-one">Guitar, strings and accessories choice</label>
+      </span>
+      <span>
+        <input type="radio" id="category-two" name="category" value="Care and maintenance">
+        <label for="category-two">Care and maintenance</label>
+      </span>
+      <span>
+        <input type="radio" id="category-three" name="category" value="Recording and amplification">
+        <label for="category-three">Recording and amplification</label>
+      </span>
+      <span>
+        <input type="radio" id="category-four" name="category" value="Other topics">
+        <label for="category-four">Other topics</label>
+      </span>
+      <br>
+      <button>Update text contents</button>
+    </form>
+    <br>
+    <form class="custom content form" id="image-form">
+      <span>
+        <p>Add new images:</p><input type="file" id="images" multiple>
+      </span>
+      <span><button>Upload images</button></span>
+      <div class="image error"></div>
+    </form>
+    <br>
+    <% for (const image of tip.images) { %>
+      <div class="delete-image">
+        <img src="data:image/png;base64,<%= image.toString('base64') %>" alt="Tip image">
+        <span>
+          <button class="delete image" id="<%= tip.images.indexOf(image) %>">Delete image</button>
+        </span>
+      </div>
+    <% } %>
+    <br>
+    <span><a class="btn" href="/tips-overview/tips/<%= tip._id %>/<%= tip.slug %>">Go back to the tip page</a></span>
+  </main>
+
+  <script type="module" src="/js/tipScripts/updateTip.js"></script>
+<%- include('../partials/footer'); %>

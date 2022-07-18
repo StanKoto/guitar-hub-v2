@@ -1,0 +1,12 @@
+<span>
+  <% if (data.pagination.prev) { %>
+    <button id="prev" value="<%= data.pagination.prev %>">
+      Previous page
+    </button>
+  <% } %>
+  <% if (data.pagination.next) { %>
+    <button id="next" value="<%= data.pagination.next %>">
+      Next page
+    </button>
+  <% } %>
+</span>

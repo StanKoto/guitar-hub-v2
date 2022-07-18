@@ -1,0 +1,29 @@
+<%- include('../partials/header'); %>
+<main>
+  <form>
+      <label for="username">User name:</label>
+      <input type="text" name="username">
+      <div class="username error"></div>
+      <label for="email">User email:</label>
+      <input type="text" name="email">
+      <div class="email error"></div>
+      <label for="password">User password:</label>
+      <input type="password" name="password">
+      <div class="password error"></div>
+      <div>
+        <span>
+          <p>User role:</p>
+          <input type="radio" id="user" name="role" value="user" checked>
+          <label for="user">User</label>
+          <input type="radio" id="admin" name="role" value="admin">
+          <label for="admin">Admin</label>        
+        </span>
+      </div>
+      <button>Create new user</button>
+    </form>
+    <br><br>
+    <span><a class="btn" href="/user-management">To the user management overview</a></span>
+</main>  
+
+  <script type="module" src="/js/userScripts/createUser.js"></script>
+<%- include('../partials/footer'); %>

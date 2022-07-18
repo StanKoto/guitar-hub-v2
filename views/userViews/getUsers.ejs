@@ -1,0 +1,43 @@
+<%- include('../partials/header'); %>
+  <header>
+    <span>
+      <h4>Sort by: </h4> 
+      <p>Username</p><button id="username-asc">&#9652;</button> <button id="username-desc">&#9662;</button>
+      <p>Tip count</p><button id="tip-count-asc">&#9652;</button> <button id="tip-count-desc">&#9662;</button>
+      <p>Status</p><button id="status-asc">&#9652;</button> <button id="status-desc">&#9662;</button>
+      <p>Role</p><button id="role-asc">&#9652;</button> <button id="role-desc">&#9662;</button>
+      <p>Creation date</p><button id="created-asc">&#9652;</button> <button id="created-desc">&#9662;</button>
+    </span>
+    <span>
+      <form class="custom util search form">
+        <label for="searchText">Search users:</label>
+        <input type="text" name="searchText">
+        <button>Go!</button>
+      </form>
+    </span>
+  </header>
+  <main>
+    <% if (data.results.length === 0) { %>
+      <br><br>
+      <span><h4>Sorry, there seem to currently be no users matching your search criteria.</h4></span>
+    <% } else { %>
+      <% for (user of data.results) { %>
+        <div>
+          <table>
+            <tr><td>Username: <%= user.username %></td></tr>
+            <tr><td>Tip count: <%= user.tipCount %></td></tr>
+            <tr><td>Status: <%= user.status %></td></tr>
+            <tr><td>Role: <%= user.role %></td></tr>
+          </table>
+          <a class="btn" href="<%= path %>/<%= user._id %>/<%= user.slug %>">View user page</a>
+        </div>
+        <br><br>
+      <% } %>
+      <%- include('../partials/pagination'); %>
+    <% } %>
+    <br><br><br>
+    <span><a class="btn" href="/user-management">To the user management overview</a></span>
+  </main>
+
+  <script type="module" src="/js/userScripts/getUsers.js"></script>
+<%- include('../partials/footer'); %>

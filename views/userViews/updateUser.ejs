@@ -1,0 +1,47 @@
+<%- include('../partials/header'); %>
+  <main>
+    <form id="details-form">
+      <p>Current username: <%= user.username %></p>
+      <label for="username">Change username to:</label>
+      <input type="text" name="username">
+      <div class="username error"></div>
+      <p>Current email: <%= user.email %></p>
+      <label for="email">Change email to:</label>
+      <input type="text" name="email">
+      <div class="email error"></div>
+      <div>
+        <span>
+          <p>Change role (current role: <%= user.role %>):</p>
+          <% if (user.role === 'user') { %>
+            <input type="radio" id="user" name="role" value="user" checked>
+            <label for="user">User</label>
+            <input type="radio" id="admin" name="role" value="admin">
+            <label for="admin">Admin</label>
+          <% } else { %>
+            <input type="radio" id="user" name="role" value="user">
+            <label for="user">User</label>
+            <input type="radio" id="admin" name="role" value="admin" checked>
+            <label for="admin">Admin</label>
+          <% } %>
+        </span>
+      </div>
+      <button>Update user details</button>
+    </form>
+    <br><br>
+    <form id="password-form">
+      <span>Change user password:</span>
+      <br>
+      <label for="adminPassword">Please enter your password:</label>
+      <input type="password" name="adminPassword" required>
+      <div class="match password error"></div>
+      <label for="newPassword">Please enter new user password:</label>
+      <input type="password" name="newPassword" required>
+      <div class="validate password error"></div>
+      <button>Update user password</button>
+    </form>
+    <br><br>
+    <span><a class="btn" href="/user-management/users/<%= user._id %>/<%= user.slug %>">Go back to the user page</a></span>
+  </main>
+
+  <script type="module" src="/js/userScripts/updateUser.js"></script>
+<%- include('../partials/footer'); %>

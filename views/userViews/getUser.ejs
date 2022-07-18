@@ -1,0 +1,30 @@
+<%- include('../partials/header'); %>
+<main>
+  <table>
+    <tr><td>Username: </td><td class="center"><%= user.username %></td></tr>
+    <tr><td>Email: </td><td class="center"><%= user.email %></td></tr>
+    <tr><td>Status: </td><td class="center"><%= user.status %></td></tr>
+    <tr><td>Role: </td><td class="center"><%= user.role %></td></tr>
+    <tr>
+      <td>Tips published: <%= user.tipCount %></td>
+      <td class="center"><a class="btn" href="/tips-overview/tips?author=<%= user._id %>">View all user's tips</a></td>
+    </tr>
+  </table>
+  <br><br>
+  <span>
+    <a class="btn" href="<%= path %>/user-ratings/given-ratings">View all given ratings</a>
+    <a class="btn" href="<%= path %>/user-ratings/received-ratings">View all received ratings</a>
+  </span>
+  <br>
+  <span>
+    <a class="btn" href="<%= path %>/user-edit-form">Update user</a>
+    <button id="delete-user">Delete user</button>
+  </span>
+  <br><br><br>
+  <span><a class="btn" href="/user-management/users">View all users</a></span>
+  <br><br>
+  <span><a class="btn" href="/user-management">To the user management overview</a></span>
+</main>
+
+  <script type="module" src="/js/userScripts/deleteUser.js"></script>
+<%- include('../partials/footer'); %>

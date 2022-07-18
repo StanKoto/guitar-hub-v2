@@ -1,0 +1,81 @@
+<%- include('../partials/header'); %>
+  <main>
+    <p><%= tip.title %></p>
+    <br><br>
+    <p><%= tip.contents %></p>
+    <br><br>
+    <span>
+      <% for (const image of tip.images) { %>
+        <img src="data:image/png;base64,<%= image.toString('base64') %>" alt="Tip image">
+      <% } %>
+    </span>
+    <br><br>
+    <div>
+      <p>Category: <%= tip.category %></p>
+      <a class="btn" href="/tips-overview/tips?category=<%= tip.category %>">View all tips in this category</a>
+    </div>
+    <% if (tip.author) { %>
+      <br>
+      <div>
+        <p>Author: <%= tip.author.username %></p>
+        <% if (tip.author && currentUser) { %>
+          <span>
+            <% if (tip.author._id.equals(currentUser._id)) { %>
+              <a class="btn" href="/tips-overview/tips?author=<%= currentUser._id %>">View all my published tips</a>
+            <% } else { %>
+              <a class="btn" href="/tips-overview/tips?author=<%= tip.author._id %>">View this author's other tips</a>
+            <% } %>
+            <% if (currentUser.role === 'admin') { %>
+              <a class="btn" href="/user-management/users/<%= tip.author._id %>/<%= tip.author.slug %>">
+                View tip's author page
+              </a>
+            <% } %>
+          </span>
+        <% } %>
+      </div>
+    <% } %>
+    <% if (tip.averageRating) { %>
+      <br>
+      <div>
+        <p>Average rating: <%= tip.averageRating %></p>
+        <% if (currentUser) { %>
+          <a class="btn" href="<%= path %>/tip-ratings %>">View all received ratings</a>
+        <% } %>
+      </div>
+    <% } %>
+    <% if (currentUser && notRated && (!tip.author || tip.author && !tip.author._id.equals(currentUser._id))) { %>
+      <br><br>
+      <p>Rate this tip:</p>
+      <form class="custom util rating form">
+        <input type="radio" id="one" name="rating" value="1">
+        <label for="one">1 (useless)</label>
+        <input type="radio" id="two" name="rating" value="2">
+        <label for="two">2 (rather useless)</label>
+        <input type="radio" id="three" name="rating" value="3">
+        <label for="three">3 (somewhat helpful)</label>
+        <input type="radio" id="four" name="rating" value="4">
+        <label for="four">4 (rather helpful)</label>
+        <input type="radio" id="five" name="rating" value="5">
+        <label for="five">5 (very helpful)</label>
+        <br><br>
+        <button>Submit your vote</button>
+        <div class="rating error"></div>
+      </form>
+    <% } %>
+    <% if (currentUser && (currentUser.role === 'admin' || (tip.author && tip.author._id.equals(currentUser._id)))) { %>
+      <br>
+      <span>
+        <a class="btn" href="<%= path %>/tip-edit-form">Update tip</a>
+        <button id="delete-tip">Delete tip</button>
+      </span>
+    <% } %>
+    <br><br><br>
+    <span>
+      <a class="btn" href="/tips-overview/tips">View all tips</a>
+      <a class="btn" href="/tips-overview">To the guitar tips overview</a>
+    </span>
+  </main>
+
+  <script type="module" src="/js/tipScripts/rateTip.js"></script>
+  <script type="module" src="/js/tipScripts/deleteTip.js"></script>
+<%- include('../partials/footer'); %>

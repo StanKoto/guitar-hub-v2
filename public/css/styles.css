@@ -1,0 +1,277 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+body{
+  display: flex;
+  min-height: 95vh;
+  flex-direction: column;
+  margin: 20px 40px 0;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  background: #fafafa;
+}
+h1, h3, h4, ul, li, p, span, div, table, label, input, textarea, a, button{
+  margin: 0;
+  padding: 0;
+  font-family: 'Quicksand', sans-serif;
+  color: #444;
+}
+ul{
+  list-style-type: none;
+}
+div{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+div button{
+  display: inline;
+}
+a{
+  text-decoration: none;
+}
+button{
+  margin: 20px auto 0 auto;
+  border-radius: 36px;
+  background: #FEE996;
+  border: 0;
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.8em;
+  display: block;
+  padding: 12px 18px;
+  letter-spacing: 2px;
+  cursor: pointer;
+}
+.btn{
+  border-radius: 36px;
+  background: #FEE996;
+  text-align: center;
+}
+label{
+  display: block;
+  margin: 10px auto;
+  width: 90%;
+  padding: 10px 0;
+}
+input{
+  display: block;
+  margin: 10px auto;
+  width: 90%;
+  padding: 10px 0;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 1em;
+  text-align: center;
+}
+input::file-selector-button{
+  border-radius: 36px;
+  background: #FEE996;
+  border: 0;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.8em;
+  color: #444;
+  padding: 6px 6px;
+  letter-spacing: 2px;
+  cursor: pointer;
+}
+span{
+  display: block;
+  text-align: center;
+}
+p{
+  display: inline;
+  margin-right: 30px;
+}
+textarea{
+  display: block;
+  margin: 10px auto;
+  width: 95%;
+  padding: 10px 12px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 1em;
+}
+table{
+  margin: auto;
+  width: 100%;
+  text-align: left;
+}
+table th, td{
+  padding: 5px 20px;
+}
+table .center{
+  text-align: center;
+}
+nav{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 30px;
+}
+nav div a{
+  margin-left: 20px;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.8em;
+  display: block;
+  padding: 10px 16px;
+  letter-spacing: 2px;
+}
+header{
+  display: flex;
+  text-align: center;
+  justify-content: space-between;
+  background: #fafafa;
+  padding: 25px 0 25px;
+  margin: 0 0 30px;
+  position: sticky;
+  top: -1px;
+}
+header h4{
+  display: inline;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+header p{
+  margin: 0 10px;
+}
+header button{
+  display: inline;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin: 0 auto;
+  padding: 0 5px;
+}
+main{
+  display: block;
+  margin: auto;
+  width: auto;
+}
+main img{
+  width: 250px;
+}
+.delete-image{
+  margin: auto;
+  width: 80%;
+}
+main h3{
+  display: block;
+  margin: auto;
+  text-align: center;
+  font-size: 1.6em;
+  color: #999;
+}
+main .btn{
+  display: inline;
+  padding: 12px 12px;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.8em;
+}
+main button{
+  display: inline;
+}
+form{
+  margin: auto;
+  width: auto;
+  padding: 30px 0;
+  box-shadow: 1px 2px 3px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  background: white;
+}
+form .error{
+  margin: auto;
+  width: 350px;
+}
+form p{
+  display: block;
+  margin: 10px 10px;
+  padding: 0 10px;
+}
+form div{
+  display: block;
+  text-align: center;
+}
+form div span{
+  text-align: left;
+  margin: 10px auto;
+  padding: 10px 0;
+  width: 90%;
+}
+form div span input {
+  display: inline;
+  margin: 0 5px 0 0;
+  padding: 0;
+  width: auto;
+}
+form div span label {
+  display: inline;
+  margin: 0 5px 0 0;
+  padding: 0;
+  width: auto;
+}
+form div span p{
+  margin: 0 0 10px 0;
+  padding: 0;
+}
+form button{
+  display: block;
+}
+.custom.form input{
+  display: inline;
+  margin: 0 10px 0 0;
+  width: auto;
+  padding: 0;
+}
+.custom.content.form{
+  padding: 30px 30px;
+}
+.custom.content.form label{
+  display: inline;
+  margin: 0 10px 0 0;
+  width: auto;
+}
+.custom.content.form p{
+  display: inline;
+  margin: 0 10px 5px 0;
+  padding: 0;
+  font-size: 1em;
+  font-weight: bold;
+}
+.custom.content.form span{
+  display: block;
+  text-align: left;
+}
+.custom.util.form{
+  display: inline;
+  background: #fafafa;
+  box-shadow: none;
+}
+.custom.util.form label{
+  display: inline;
+  margin: 0 10px 0 0;
+  width: auto;
+}
+.custom.util.search.form button{
+  display: inline;
+  width: auto;
+}
+.error{
+  color: #ff0099;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+.footer{
+  flex-shrink: 0;
+  position: sticky;
+  margin: 30px 0 0;
+  text-align: center;
+  padding: 10px 0;
+  bottom: 0;
+  font-family: 'Quicksand', sans-serif;
+  color: #aaa;
+  background: #fafafa;
+}

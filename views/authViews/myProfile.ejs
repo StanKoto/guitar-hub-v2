@@ -1,0 +1,32 @@
+<%- include('../partials/header'); %>
+  <main>
+    <form id="details-form">
+      <p>Username: <%= user.username %></p>
+      <label for="username">Change username to:</label>
+      <input type="text" name="username">
+      <div class="username error"></div>
+      <br>
+      <p>Email: <%= user.email %></p>
+      <label for="email">Change email to:</label>
+      <input type="text" name="email">
+      <div class="email error"></div>
+      <button>Update profile details</button>
+    </form>
+    <br><br>
+    <form id="password-form">
+      <span>Change password</span>
+      <br>
+      <label for="currentPassword">Please enter your current password:</label>
+      <input type="password" name="currentPassword" required>
+      <div class="match password error"></div>
+      <label for="newPassword">Please enter your new password:</label>
+      <input type="password" name="newPassword" required>
+      <div class="validate password error"></div>
+      <button>Update profile password</button>
+    </form>
+    <br><br>
+    <span><a class="btn" href="/">Go back to main menu</a></span>
+  </main>
+
+  <script type="module" src="/js/authScripts/update.js"></script>
+<%- include('../partials/footer'); %>

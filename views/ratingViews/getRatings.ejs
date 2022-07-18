@@ -1,0 +1,55 @@
+<%- include('../partials/header'); %>
+  <% if (data.results.length === 0) { %>
+    <main>
+      <% if (path.includes('tip-ratings')) { %>
+        <h4>Sorry, there either are no ratings matching your search criteria or this tip hasn't received any ratings yet.</h4>
+      <% } else if (path.includes('given-ratings')) { %>
+        <h4>Sorry, there either are no ratings matching your search criteria or this user hasn't given any ratings yet.</h4>
+      <% } else { %>
+        <h4>Sorry, there either are no ratings matching your search criteria or this user hasn't received any ratings yet</h4>
+      <% } %>
+  <% } else { %>
+    <header>
+      <span>
+        <h4>Sort by: </h4> 
+        <p>Rating</p><button id="rating-asc">&#9652;</button> <button id="rating-desc">&#9662;</button>
+        <p>Creation date</p><button id="created-asc">&#9652;</button> <button id="created-desc">&#9662;</button>
+      </span>
+    </header>
+    <main>
+      <table>
+        <tr>
+          <% if (path.includes('tip-ratings') || path.includes('received-ratings')) { %>
+            <th>Reviewer</th>
+          <% } else { %>
+            <th>Recipient</th>
+          <% } %>
+          <th class="center">Rating</th>
+        </tr>
+        <% for (rating of data.results) { %>
+          <tr>
+            <% if (path.includes('tip-ratings') || path.includes('received-ratings')) { %>
+              <% if (rating.reviewer) { %>
+                <td><%= rating.reviewer.username %></td>
+              <% } else { %>
+                <td>Deleted user</td>
+              <% } %>
+            <% } else { %>
+              <td><%= rating.recipient.username %></td>
+            <% } %>
+            <td class="center"><%= rating.rating %></td>
+          </tr>
+        <% } %>
+      </table>
+      <%- include('../partials/pagination'); %>
+  <% } %>
+    <br><br><br>
+    <% if (path.includes('tip-ratings')) { %>
+      <span><a class="btn" href="/tips-overview/tips/<%= id %>/<%= slug %>">Back to the tip page</a></span>
+    <% } else { %>
+      <span><a class="btn" href="/user-management/users/<%= id %>/<%= slug %>">Back to the user page</a></span>
+    <% } %>
+    </main>
+  
+  <script type="module" src="/js/ratingScripts/getRatings.js"></script>
+<%- include('../partials/footer'); %>

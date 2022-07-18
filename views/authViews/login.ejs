@@ -1,0 +1,25 @@
+<%- include('../partials/header'); %>
+  <main>
+    <h3>
+      Please sign in<br>
+      using your credentials
+    </h3>
+    <br>
+    <form>
+      <label for="email">Email: </label>
+      <input type="text" name="email">
+      <label for="password">Password: </label>
+      <input type="password" name="password">
+      <div class="credentials error"></div>
+      <button>Log in</button>
+    </form>
+    <br><br>
+    <span>
+      <a class="btn" href="/auth/forgot-password">I forgot my password</a>
+      <br><br><br>
+      <a class="btn" href="/auth">Go back to previous menu</a>
+    </span>
+  </main>
+
+  <script type="module" src="/js/authScripts/login.js"></script>
+<%- include('../partials/footer'); %>

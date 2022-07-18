@@ -1,0 +1,25 @@
+<%- include('../partials/header'); %>
+  <main>
+    <h3>
+      Please enter your details<br>
+      to create a new user profile
+    </h3>
+    <br>
+    <form>
+      <label for="username">Please choose your username: </label>
+      <input type="text" name="username">
+      <div class="username error"></div>
+      <label for="email">Please enter your email: </label>
+      <input type="text" name="email">
+      <div class="email error"></div>
+      <label for="password">Please choose a password: </label>
+      <input type="password" name="password">
+      <div class="password error"></div>
+      <button>Sign up</button>
+    </form>
+    <br>
+    <span><a class="btn" href="/auth">Go back to previous menu</a></span>
+  </main>
+
+  <script type="module" src="/js/authScripts/signup.js"></script>
+<%- include('../partials/footer'); %>
