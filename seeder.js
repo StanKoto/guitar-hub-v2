@@ -1,15 +1,14 @@
-const fs = require('fs');
-const path = require('path');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const { User } = require('./models/User');
-const { Tip } = require('./models/Tip');
-const { Rating } = require('./models/Rating');
+import * as fs from 'fs';
+import mongoose from 'mongoose';
+import * as dotenv from 'dotenv';
+import { User } from './models/User.js';
+import { Tip } from './models/Tip.js';
+import { Rating } from './models/Rating.js';
 
-dotenv.config({ path: path.join(__dirname, 'config.env') });
-const users = JSON.parse(fs.readFileSync(path.join(__dirname, 'data/users.json'), 'utf-8'));
-const tips = JSON.parse(fs.readFileSync(path.join(__dirname, 'data/tips.json'), 'utf-8'));
-const ratings = JSON.parse(fs.readFileSync(path.join(__dirname, 'data/ratings.json'), 'utf-8'));
+dotenv.config({ path: new URL('config.env', import.meta.url) });
+const users = JSON.parse(fs.readFileSync(new URL('data/users.json', import.meta.url)), 'utf-8');
+const tips = JSON.parse(fs.readFileSync(new URL('data/tips.json', import.meta.url)), 'utf-8');
+const ratings = JSON.parse(fs.readFileSync(new URL('data/ratings.json', import.meta.url)), 'utf-8');
 
 const insertData = async () => {
   await User.create(users);

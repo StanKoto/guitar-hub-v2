@@ -1,8 +1,8 @@
-const crypto = require('crypto');
-const mongoose = require('mongoose');
-const { isEmail } = require('validator');
-const slugify = require('slugify');
-const bcrypt = require('bcrypt');
+import * as crypto from 'crypto';
+import mongoose from 'mongoose';
+import isEmail from 'validator/lib/isEmail.js';
+import slugify from 'slugify';
+import * as bcrypt from 'bcrypt';
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -74,4 +74,4 @@ userSchema.methods.getResetPasswordToken = function () {
   return resetToken;
 };
 
-exports.User = mongoose.model('User', userSchema);
+export const User = mongoose.model('User', userSchema);

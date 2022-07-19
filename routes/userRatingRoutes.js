@@ -1,20 +1,20 @@
-const express = require('express');
-const { searchResults } = require('../middleware/searchResults');
-const { Rating } = require('../models/Rating');
-const { ratings_get } = require('../controllers/ratingController');
+import express from 'express';
+import { searchResults } from '../middleware/searchResults.js';
+import { Rating } from '../models/Rating.js';
+import { ratings_get } from '../controllers/ratingController.js';
 
-const ratingRouter = express.Router({ mergeParams: true });
+const userRatingRouter = express.Router({ mergeParams: true });
 
-ratingRouter.get('/given-ratings', searchResults(Rating, [
+userRatingRouter.get('/given-ratings', searchResults(Rating, [
   { path: 'tip', select: 'title' }, 
   { path: 'reviewer', select: 'username' },
   { path: 'recipient', select: 'username' }
 ]), ratings_get);
 
-ratingRouter.get('/received-ratings', searchResults(Rating, [
+userRatingRouter.get('/received-ratings', searchResults(Rating, [
   { path: 'tip', select: 'title' }, 
   { path: 'reviewer', select: 'username' },
   { path: 'recipient', select: 'username' }
 ]), ratings_get);
 
-module.exports = ratingRouter;
+export { userRatingRouter };

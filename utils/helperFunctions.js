@@ -1,13 +1,13 @@
-const sharp = require('sharp');
-const { User } = require('../models/User');
-const { ErrorResponse } = require('../utils/errorHandling');
+import sharp from 'sharp';
+import { User } from '../models/User.js';
+import { ErrorResponse } from '../utils/errorHandling.js';
 
-exports.asyncHandler = fn => (req, res, next) =>
+const asyncHandler = fn => (req, res, next) =>
 Promise
   .resolve(fn(req, res, next))
   .catch(next);
 
-exports.regenerateSession = (req, res, user, status = 200) => {
+const regenerateSession = (req, res, user, status = 200) => {
   req.session.regenerate(err => {
     if (err) throw err
     req.session.user = user._id;
@@ -19,7 +19,7 @@ exports.regenerateSession = (req, res, user, status = 200) => {
   });
 };
 
-exports.clearSessionUser = (req, res, selfDelete) => {
+const clearSessionUser = (req, res, selfDelete) => {
   req.session.user = null;
   req.session.save(err => {
     if (err) throw err
@@ -31,20 +31,20 @@ exports.clearSessionUser = (req, res, selfDelete) => {
   });
 };
 
-exports.checkPassword = async (req, user, password) => {
+const checkPassword = async (req, user, password) => {
   let errorMessage = 'Invalid credentials';
   if (req.user) errorMessage = 'Invalid password'
   const isMatch = await user.matchPassword(password);
   if (!isMatch) throw new Error(errorMessage)
 };
 
-exports.checkAuthorship = (req, tip) => {
+const checkAuthorship = (req, tip) => {
   if ((!tip.author || tip.author && !tip.author.equals(req.user._id)) && req.user.role === 'user') {
     throw new ErrorResponse('You are not authorized to alter or delete this tip!', 401);
   }
 };
 
-exports.checkUserStatus = async (req) => {
+const checkUserStatus = async (req) => {
   if (req.user.status === 'passive') {
     const updatedUser = await User.findByIdAndUpdate(req.user._id, { status: 'active' }, {
       runValidators: true,
@@ -54,7 +54,7 @@ exports.checkUserStatus = async (req) => {
   }
 };
 
-exports.checkResource = async (req, model, select, populate) => {
+const checkResource = async (req, model, select, populate) => {
   const id = req.params.id || req.user._id;
   let resource = model.findById(id)
   if (select) resource = await resource.select(select)
@@ -63,7 +63,7 @@ exports.checkResource = async (req, model, select, populate) => {
   return resource;
 };
 
-exports.checkResourceAndUpdate = async (req, model) => {
+const checkResourceAndUpdate = async (req, model) => {
   const id = req.params.id || req.user._id;
   const resource = await model.findByIdAndUpdate(id, req.body, {
     runValidators: true,
@@ -73,7 +73,7 @@ exports.checkResourceAndUpdate = async (req, model) => {
   return resource;
 };
 
-exports.processImages = async (req, images) => {
+const processImages = async (req, images) => {
   const bufferArray = await Promise.all(req.files.map(file => sharp(file.buffer).resize(480, 270).png().toBuffer()));
   for (const buffer of bufferArray) {
     for(const image of images) {
@@ -81,4 +81,16 @@ exports.processImages = async (req, images) => {
     }
     images.push(buffer);
   }
+};
+
+export { 
+  asyncHandler, 
+  regenerateSession, 
+  clearSessionUser, 
+  checkPassword, 
+  checkAuthorship, 
+  checkUserStatus,
+  checkResource,
+  checkResourceAndUpdate,
+  processImages
 };

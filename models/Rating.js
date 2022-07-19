@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const ratingSchema = new mongoose.Schema({
   rating: {
@@ -55,4 +55,4 @@ ratingSchema.post('remove', function () {
   this.constructor.getAverageRating(this.tip);
 });
 
-exports.Rating = mongoose.model('Rating', ratingSchema);
+export const Rating = mongoose.model('Rating', ratingSchema);

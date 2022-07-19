@@ -1,8 +1,8 @@
-const { Rating } = require('../models/Rating');
-const { Tip } = require('../models/Tip');
-const { asyncHandler, checkUserStatus, checkResource } = require('../utils/helperFunctions');
+import { Rating } from '../models/Rating.js';
+import { Tip } from '../models/Tip.js';
+import { asyncHandler, checkUserStatus, checkResource } from '../utils/helperFunctions.js';
 
-exports.ratings_get = asyncHandler(async (req, res, next) => {
+const ratings_get = asyncHandler(async (req, res, next) => {
   let title;
   if (req.baseUrl.includes('tip-ratings')) title = `Tip ${req.params.id} ratings`
   if (req.path.includes('given-ratings')) title = `Ratings given by ${req.params.slug}`
@@ -16,7 +16,7 @@ exports.ratings_get = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.ratings_post = asyncHandler(async (req, res, next) => {
+const ratings_post = asyncHandler(async (req, res, next) => {
   const tip = await checkResource(req, Tip);
   if (tip.author && tip.author.equals(req.user._id)) throw new Error('Own tip rated')
   const rating = new Rating({
@@ -29,3 +29,5 @@ exports.ratings_post = asyncHandler(async (req, res, next) => {
   await checkUserStatus(req);
   res.status(201).json({ success: true });
 });
+
+export { ratings_get, ratings_post };

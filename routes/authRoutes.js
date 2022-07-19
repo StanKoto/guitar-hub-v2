@@ -1,6 +1,6 @@
-const express = require('express');
-const { checkAuthentication } = require('../middleware/auth');
-const { 
+import express from 'express';
+import { checkAuthentication } from '../middleware/auth.js';
+import { 
   auth_get, 
   signup_get, 
   signup_post, 
@@ -14,7 +14,7 @@ const {
   myDetails_put, 
   myPassword_put, 
   logout_get
-} = require('../controllers/authController');
+} from '../controllers/authController.js';
 
 const authRouter = express.Router();
 
@@ -37,4 +37,4 @@ authRouter.put('/my-profile/my-details', myDetails_put);
 authRouter.put('/my-profile/my-password', myPassword_put);
 authRouter.get('/logout', logout_get);
 
-module.exports = authRouter;
+export { authRouter };

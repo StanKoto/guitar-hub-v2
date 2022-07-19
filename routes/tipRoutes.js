@@ -1,9 +1,9 @@
-const express = require('express');
-const multer = require('multer');
-const { checkAuthentication } = require('../middleware/auth');
-const { searchResults } = require('../middleware/searchResults');
-const { Tip } = require('../models/Tip');
-const {
+import express from 'express';
+import multer from 'multer';
+import { checkAuthentication } from '../middleware/auth.js';
+import { searchResults } from '../middleware/searchResults.js';
+import { Tip } from '../models/Tip.js';
+import {
   tipsOverview_get, 
   tips_get, 
   tip_get, 
@@ -14,8 +14,8 @@ const {
   tip_put, 
   tipImages_post, 
   tipImages_delete
-} = require('../controllers/tipController');
-const tipRatingRouter = require('../routes/tipRatingRoutes');
+} from '../controllers/tipController.js';
+import { tipRatingRouter } from '../routes/tipRatingRoutes.js';
 
 const upload = multer({
   limits: {
@@ -45,4 +45,4 @@ tipRouter.get('/tips/:id/:slug/tip-edit-form', tipEditForm_get);
 tipRouter.post('/tips/:id/:slug/images', upload.array('images', 10), tipImages_post)
 tipRouter.delete('/tips/:id/:slug/images/:index', tipImages_delete);
 
-module.exports = tipRouter;
+export { tipRouter };

@@ -1,16 +1,18 @@
-const { asyncHandler } = require('../utils/helperFunctions');
+import { asyncHandler } from '../utils/helperFunctions.js';
 
-exports.index_get = asyncHandler((req, res, next) => {
+const index_get = asyncHandler((req, res, next) => {
   res.render('mainViews/index', { title: 'Guitar Wiki' });
 });
 
-exports.about_get = asyncHandler((req, res, next) => {
+const about_get = asyncHandler((req, res, next) => {
   res.render('mainViews/about', { title: 'About' });
 });
 
-exports.badRequest_get = asyncHandler((req, res, next) => {
+const badRequest_get = asyncHandler((req, res, next) => {
   res.status(404).render('errorViews/userError', { 
     title: '404', 
     message: 'Oops! It seems the page you wanted to reach does not exist!'
   })
 });
+
+export { index_get, about_get, badRequest_get };
