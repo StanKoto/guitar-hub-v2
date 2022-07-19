@@ -1,4 +1,4 @@
-exports.searchResults = (model, populate) => async (req, res, next) => {
+export const searchResults = (model, populate) => async (req, res, next) => {
   let results;
   const query = { ...req.query };
   const excludedFields = [ 'select', 'sort', 'textSearch', 'page', 'limit' ];

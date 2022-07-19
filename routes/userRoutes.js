@@ -1,8 +1,8 @@
-const express = require('express');
-const { checkAuthentication, checkRole } = require('../middleware/auth');
-const { searchResults } = require('../middleware/searchResults');
-const { User } = require('../models/User');
-const {
+import express from 'express';
+import { checkAuthentication, checkRole } from '../middleware/auth.js';
+import { searchResults } from '../middleware/searchResults.js';
+import { User } from '../models/User.js';
+import {
   userManagement_get, 
   newUserForm_get, 
   users_get, 
@@ -12,8 +12,8 @@ const {
   userEditForm_get, 
   userDetails_put, 
   userPassword_put 
-} = require('../controllers/userController');
-const userRatingRouter = require('../routes/userRatingRoutes');
+} from '../controllers/userController.js';
+import { userRatingRouter } from '../routes/userRatingRoutes.js';
 
 const userRouter = express.Router();
 
@@ -32,4 +32,4 @@ userRouter.get('/users/:id/:slug/user-edit-form', userEditForm_get);
 userRouter.put('/users/:id/:slug/user-details', userDetails_put);
 userRouter.put('/users/:id/:slug/user-password', userPassword_put);
 
-module.exports = userRouter;
+export { userRouter };

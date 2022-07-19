@@ -1,33 +1,33 @@
-const crypto = require('crypto');
-const { User } = require('../models/User');
-const { 
+import * as crypto from 'crypto';
+import { User } from '../models/User.js';
+import { 
   asyncHandler, 
   regenerateSession,
   clearSessionUser, 
   checkPassword, 
   checkResource, 
   checkResourceAndUpdate
-} = require('../utils/helperFunctions');
-const { sendEmail } = require('../utils/sendEmail');
+} from '../utils/helperFunctions.js';
+import { sendEmail } from '../utils/sendEmail.js';
 
-exports.auth_get = asyncHandler((req, res, next) => {
+const auth_get = asyncHandler((req, res, next) => {
   res.render('authViews/auth', { title: 'Authorization' });
 });
 
-exports.signup_get = asyncHandler((req, res, next) => {
+const signup_get = asyncHandler((req, res, next) => {
   res.render('authViews/signup', { title: 'Sign up' });
 });
 
-exports.signup_post = asyncHandler(async (req, res, next) => {
+const signup_post = asyncHandler(async (req, res, next) => {
   const user = await User.create({ username: req.body.username, email: req.body.email, password: req.body.password });
   regenerateSession(req, res, user, 201);
 });
 
-exports.login_get = asyncHandler((req, res, next) => {
+const login_get = asyncHandler((req, res, next) => {
   res.render('authViews/login', { title: 'Log in' });
 });
 
-exports.login_post = asyncHandler(async (req, res, next) => {
+const login_post = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email }).select('+password');
   if (!user) throw new Error('Invalid credentials');
@@ -35,11 +35,11 @@ exports.login_post = asyncHandler(async (req, res, next) => {
   regenerateSession(req, res, user);
 });
 
-exports.forgotPassword_get = asyncHandler(async (req, res, next) => {
+const forgotPassword_get = asyncHandler(async (req, res, next) => {
   res.render('authViews/forgotPassword', { title: 'Forgot password' });
 });
 
-exports.forgotPassword_post = asyncHandler(async (req, res, next) => {
+const forgotPassword_post = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
   if (!user) throw new Error('Invalid email');
   const resetToken = user.getResetPasswordToken();
@@ -57,11 +57,11 @@ exports.forgotPassword_post = asyncHandler(async (req, res, next) => {
   }
 });
 
-exports.resetPassword_get = asyncHandler(async (req, res, next) => {
+const resetPassword_get = asyncHandler(async (req, res, next) => {
   res.render('authViews/resetPassword', { title: 'Reset password' });
 });
 
-exports.resetPassword_put = asyncHandler(async (req, res, next) => {
+const resetPassword_put = asyncHandler(async (req, res, next) => {
   const resetPasswordToken = crypto.createHash('sha256').update(req.params.resetToken).digest('hex');
   const user = await User.findOne({ resetPasswordToken, resetPasswordExpire: { $gt: Date.now() } });
   if (!user) throw new Error('Invalid token')
@@ -72,17 +72,17 @@ exports.resetPassword_put = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true });
 });
 
-exports.myProfile_get = asyncHandler(async (req, res, next) => {
+const myProfile_get = asyncHandler(async (req, res, next) => {
   const user = await checkResource(req, User);
   res.render('authViews/myProfile', { title: 'Update my details', user });
 });
 
-exports.myDetails_put = asyncHandler(async (req, res, next) => {
+const myDetails_put = asyncHandler(async (req, res, next) => {
   const user = await checkResourceAndUpdate(req, User);
   regenerateSession(req, res, user);
 });
 
-exports.myPassword_put = asyncHandler(async (req, res, next) => {
+const myPassword_put = asyncHandler(async (req, res, next) => {
   const user = await checkResource(req, User, '+password');
   await checkPassword(req, user, req.body.currentPassword);
   user.password = req.body.newPassword;
@@ -90,6 +90,22 @@ exports.myPassword_put = asyncHandler(async (req, res, next) => {
   regenerateSession(req, res, user);
 });
 
-exports.logout_get = asyncHandler((req, res, next) => {
+const logout_get = asyncHandler((req, res, next) => {
   clearSessionUser(req, res, false);
 });
+
+export { 
+  auth_get, 
+  signup_get, 
+  signup_post, 
+  login_get, 
+  login_post, 
+  forgotPassword_get, 
+  forgotPassword_post,
+  resetPassword_get,
+  resetPassword_put,
+  myProfile_get,
+  myDetails_put,
+  myPassword_put,
+  logout_get
+};

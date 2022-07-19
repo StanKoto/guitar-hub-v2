@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const slugify = require('slugify');
+import mongoose from 'mongoose';
+import slugify from 'slugify';
 
 const tipSchema = new mongoose.Schema({
   title: {
@@ -90,4 +90,4 @@ tipSchema.pre('remove', async function () {
 });
 
 
-exports.Tip = mongoose.model('Tip', tipSchema);
+export const Tip = mongoose.model('Tip', tipSchema);

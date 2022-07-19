@@ -1,7 +1,7 @@
-const express = require('express');
-const { searchResults } = require('../middleware/searchResults');
-const { Rating } = require('../models/Rating');
-const { ratings_get, ratings_post } = require('../controllers/ratingController');
+import express from 'express';
+import { searchResults } from '../middleware/searchResults.js';
+import { Rating } from '../models/Rating.js';
+import { ratings_get, ratings_post } from '../controllers/ratingController.js';
 
 const tipRatingRouter = express.Router({ mergeParams: true });
 
@@ -22,4 +22,4 @@ tipRatingRouter.route('/')
 ]), ratings_get)
   .post(ratings_post);
 
-module.exports = tipRatingRouter;
+export { tipRatingRouter };

@@ -79,4 +79,4 @@ const handleErrors = (err, req, res, next) => {
   }
 };
 
-module.exports = { ErrorResponse, handleErrors };
+export { ErrorResponse, handleErrors };
