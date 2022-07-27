@@ -1,11 +1,10 @@
 import * as fs from 'fs';
 import mongoose from 'mongoose';
-import * as dotenv from 'dotenv';
+import config from './envVariables.js';
 import { User } from './models/User.js';
 import { Tip } from './models/Tip.js';
 import { Rating } from './models/Rating.js';
 
-dotenv.config({ path: new URL('config.env', import.meta.url) });
 const users = JSON.parse(fs.readFileSync(new URL('data/users.json', import.meta.url)), 'utf-8');
 const tips = JSON.parse(fs.readFileSync(new URL('data/tips.json', import.meta.url)), 'utf-8');
 const ratings = JSON.parse(fs.readFileSync(new URL('data/ratings.json', import.meta.url)), 'utf-8');
@@ -29,7 +28,7 @@ const deleteData = async () => {
   process.exit();
 };
 
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(config.db.mongoUri)
   .then(res => {
     if (process.argv[2] === '-i') {
       insertData();
