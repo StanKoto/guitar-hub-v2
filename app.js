@@ -1,4 +1,3 @@
-import * as dotenv from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
 import session from 'express-session';
@@ -9,6 +8,7 @@ import xss from 'xss-clean';
 import rateLimit from 'express-rate-limit';
 import hpp from 'hpp';
 import cors from 'cors';
+import config from './envVariables.js';
 import { checkUser } from './middleware/auth.js';
 import { authRouter } from './routes/authRoutes.js';
 import { tipRouter } from './routes/tipRoutes.js';
@@ -17,12 +17,10 @@ import { errorRouter } from './routes/errorRoutes.js';
 import { mainRouter } from './routes/mainRoutes.js';
 import { handleErrors } from './utils/errorHandling.js';
 
-dotenv.config({ path: new URL('config.env', import.meta.url) });
-
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = config.main.port || 3000;
 
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(config.db.mongoUri)
   .then(res => {
     console.log('MongoDB successfully connected');
     app.listen(PORT, console.log(`Listening on port ${PORT}`));
@@ -35,26 +33,30 @@ app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.set('trust proxy', 1);
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
+const sessionOptions = {
+  secret: config.session.secret,
+  store: MongoStore.create({ mongoUrl: config.db.mongoUri }),
   resave: false,
   saveUninitialized: true,
   cookie: {
-    secure: true,
     httpOnly: true,
-    maxAge: 10800000
+    maxAge: config.session.cookieMaxAge
   }
-}));
+};
+
+if (app.get('env') === 'production') {
+  app.set('trust proxy', 1);
+  sessionOptions.cookie.secure = true;
+}
+app.use(session(sessionOptions));
 
 app.use(mongoSanitize());
 app.use(helmet());
 app.use(xss());
 
 const limiter = rateLimit({
-  windowMs: 10 * 60 * 1000,
-  max: 100
+  windowMs: config.limiter.windowMS,
+  max: config.limiter.max
 });
 
 app.use(limiter);

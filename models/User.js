@@ -48,10 +48,10 @@ const userSchema = new mongoose.Schema({
 userSchema.index({ username: 'text', email: 'text' });
 
 userSchema.pre('save', async function (next) {
+  if (this.isModified('username')) this.slug = slugify(this.username, { lower: true });
   if (!this.isModified('password')) return next()
   const saltRounds = 10;
   this.password = await bcrypt.hash(this.password, saltRounds);
-  this.slug = slugify(this.username, { lower: true });
 });
 
 userSchema.pre('remove', async function () {
