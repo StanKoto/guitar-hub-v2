@@ -73,7 +73,7 @@ tipSchema.statics.getTipCount = async function (authorId) {
 };
 
 tipSchema.pre('save', function (next) {
-  this.slug = slugify(this.title, { lower: true });
+  if (this.isModified('title')) this.slug = slugify(this.title, { lower: true });
   next();
 });
 

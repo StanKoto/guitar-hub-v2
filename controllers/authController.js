@@ -5,8 +5,7 @@ import {
   regenerateSession,
   clearSessionUser, 
   checkPassword, 
-  checkResource, 
-  checkResourceAndUpdate
+  checkResource
 } from '../utils/helperFunctions.js';
 import { sendEmail } from '../utils/sendEmail.js';
 
@@ -78,7 +77,10 @@ const myProfile_get = asyncHandler(async (req, res, next) => {
 });
 
 const myDetails_put = asyncHandler(async (req, res, next) => {
-  const user = await checkResourceAndUpdate(req, User);
+  const user = await checkResource(req, User);
+  if (req.body.username) user.username = req.body.username
+  if (req.body.email) user.email = req.body.email
+  await user.save(); 
   regenerateSession(req, res, user);
 });
 

@@ -4,8 +4,7 @@ import {
   regenerateSession,
   clearSessionUser, 
   checkPassword, 
-  checkResource, 
-  checkResourceAndUpdate
+  checkResource
 } from '../utils/helperFunctions.js';
 import { ErrorResponse } from '../utils/errorHandling.js';
 
@@ -44,7 +43,11 @@ const userEditForm_get = asyncHandler(async (req, res, next) => {
 });
 
 const userDetails_put = asyncHandler(async (req, res, next) => {
-  const user = await checkResourceAndUpdate(req, User);
+  const user = await checkResource(req, User);
+  if (req.body.username) user.username = req.body.username
+  if (req.body.email) user.email = req.body.email
+  if (req.body.role) user.role = req.body.role
+  await user.save();
   if (user._id.equals(req.user._id)) return regenerateSession(req, res, user)
   res.status(200).json({ user, selfUpdate: false });
 });

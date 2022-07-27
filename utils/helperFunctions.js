@@ -63,16 +63,6 @@ const checkResource = async (req, model, select, populate) => {
   return resource;
 };
 
-const checkResourceAndUpdate = async (req, model) => {
-  const id = req.params.id || req.user._id;
-  const resource = await model.findByIdAndUpdate(id, req.body, {
-    runValidators: true,
-    new: true
-  });
-  if (!resource) throw new ErrorResponse(`No ${model.collection.collectionName.toLowerCase()} found with ID of ${id}`, 404)
-  return resource;
-};
-
 const processImages = async (req, images) => {
   const bufferArray = await Promise.all(req.files.map(file => sharp(file.buffer).resize(480, 270).png().toBuffer()));
   for (const buffer of bufferArray) {
@@ -91,6 +81,5 @@ export {
   checkAuthorship, 
   checkUserStatus,
   checkResource,
-  checkResourceAndUpdate,
   processImages
 };
