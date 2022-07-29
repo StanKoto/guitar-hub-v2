@@ -1,7 +1,6 @@
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
-import session from 'express-session';
-import MongoStore from 'connect-mongo';
 import mongoSanitize from 'express-mongo-sanitize';
 import helmet from 'helmet';
 import xss from 'xss-clean';
@@ -32,23 +31,7 @@ app.set('view engine', 'ejs');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-const sessionOptions = {
-  secret: config.session.secret,
-  store: MongoStore.create({ mongoUrl: config.db.mongoUri }),
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    httpOnly: true,
-    maxAge: config.session.cookieMaxAge
-  }
-};
-
-if (app.get('env') === 'production') {
-  app.set('trust proxy', 1);
-  sessionOptions.cookie.secure = true;
-}
-app.use(session(sessionOptions));
+app.use(cookieParser());
 
 app.use(mongoSanitize());
 app.use(helmet());

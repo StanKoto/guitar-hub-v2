@@ -23,8 +23,6 @@ const ratingSchema = new mongoose.Schema({
   timestamps: true
 });
 
-ratingSchema.index({ tip: 1, reviewer: 1 }, { unique: true });
-
 ratingSchema.statics.getAverageRating = async function(tipId) {
   const aggregationResults = await this.aggregate([
     {
@@ -55,4 +53,8 @@ ratingSchema.post('remove', function () {
   this.constructor.getAverageRating(this.tip);
 });
 
-export const Rating = mongoose.model('Rating', ratingSchema);
+const Rating = mongoose.model('Rating', ratingSchema);
+
+Rating.collection.createIndex({ tip: 1, reviewer: 1 }, { unique: true, partialFilterExpression: { reviewer: { $type: 'objectId' } } });
+
+export { Rating };

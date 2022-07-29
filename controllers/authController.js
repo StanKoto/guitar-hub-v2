@@ -1,9 +1,8 @@
 import * as crypto from 'crypto';
 import { User } from '../models/User.js';
 import { 
-  asyncHandler, 
-  regenerateSession,
-  clearSessionUser, 
+  asyncHandler,
+  createJwtTokenAndSetCookie,
   checkPassword, 
   checkResource
 } from '../utils/helperFunctions.js';
@@ -19,7 +18,7 @@ const signup_get = asyncHandler((req, res, next) => {
 
 const signup_post = asyncHandler(async (req, res, next) => {
   const user = await User.create({ username: req.body.username, email: req.body.email, password: req.body.password });
-  regenerateSession(req, res, user, 201);
+  createJwtTokenAndSetCookie(user._id, res, 201);
 });
 
 const login_get = asyncHandler((req, res, next) => {
@@ -31,7 +30,7 @@ const login_post = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({ email }).select('+password');
   if (!user) throw new Error('Invalid credentials');
   await checkPassword(req, user, password);
-  regenerateSession(req, res, user);
+  createJwtTokenAndSetCookie(user._id, res);
 });
 
 const forgotPassword_get = asyncHandler(async (req, res, next) => {
@@ -81,7 +80,7 @@ const myDetails_put = asyncHandler(async (req, res, next) => {
   if (req.body.username) user.username = req.body.username
   if (req.body.email) user.email = req.body.email
   await user.save(); 
-  regenerateSession(req, res, user);
+  res.status(200).json({ success: true });
 });
 
 const myPassword_put = asyncHandler(async (req, res, next) => {
@@ -89,11 +88,12 @@ const myPassword_put = asyncHandler(async (req, res, next) => {
   await checkPassword(req, user, req.body.currentPassword);
   user.password = req.body.newPassword;
   await user.save();
-  regenerateSession(req, res, user);
+  res.status(200).json({ success: true });
 });
 
 const logout_get = asyncHandler((req, res, next) => {
-  clearSessionUser(req, res, false);
+  res.cookie('jwt', '', { maxAge: 1 });
+  res.redirect('/auth');
 });
 
 export { 

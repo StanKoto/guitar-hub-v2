@@ -13,10 +13,10 @@ const tips_get = asyncHandler(async (req, res, next) => {
 const tip_get = asyncHandler(async (req, res, next) => {
   const tip = await checkResource(req, Tip, '+images', { path: 'author', select: 'username slug' });
   let notRated = true;
-  if (req.user && !tip.author._id.equals(req.user._id)) {
+  if (req.user && (tip.author && !tip.author._id.equals(req.user._id) || !tip.author)) {
     await tip.populate({ path: 'ratings', select: 'reviewer' });
     for (const rating of tip.ratings) {
-      if (rating.reviewer.equals(req.user._id)) {
+      if (rating.reviewer && rating.reviewer.equals(req.user._id)) {
         notRated = false;
         break;
       }
