@@ -6,7 +6,7 @@ const emptyErrors = (customErrors) => {
 
 const makeRequest = async (url, method, redirectUrl, body, customErrors, message) => {
   try {
-    const params = {method};
+    const params = { method };
     if (body && !(body instanceof FormData)) params.headers = { 'Content-Type': 'application/json' }
     if (method !== 'DELETE') params.body = body;
     const res = await fetch(url, params);
@@ -47,7 +47,7 @@ const makeRequest = async (url, method, redirectUrl, body, customErrors, message
       location.assign(redirectUrl);
     }
   } catch (err) {
-    location.assign('/server-error');
+    location.assign('/errors/server-error');
   }
 };
 

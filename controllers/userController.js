@@ -1,8 +1,6 @@
 import { User } from '../models/User.js';
 import { 
-  asyncHandler, 
-  regenerateSession,
-  clearSessionUser, 
+  asyncHandler,
   checkPassword, 
   checkResource
 } from '../utils/helperFunctions.js';
@@ -33,7 +31,10 @@ const user_get = asyncHandler(async (req, res, next) => {
 const user_delete = asyncHandler(async (req, res, next) => {
   const user = await checkResource(req, User);
   await user.remove();
-  if (user._id.equals(req.user._id)) return clearSessionUser(req, res, true)
+  if (user._id.equals(req.user._id)) {
+    res.cookie('jwt', '', { maxAge: 1 });
+    return res.status(200).json({ selfDelete: true });
+  }
   res.status(200).json({ success: true });
 });
 
@@ -48,8 +49,8 @@ const userDetails_put = asyncHandler(async (req, res, next) => {
   if (req.body.email) user.email = req.body.email
   if (req.body.role) user.role = req.body.role
   await user.save();
-  if (user._id.equals(req.user._id)) return regenerateSession(req, res, user)
-  res.status(200).json({ user, selfUpdate: false });
+  if (user._id.equals(req.user._id)) return res.status(200).json({ user, selfUpdate: true })
+  res.status(200).json({ user });
 });
 
 const userPassword_put = asyncHandler(async (req, res, next) => {
@@ -59,8 +60,7 @@ const userPassword_put = asyncHandler(async (req, res, next) => {
   const user = await checkResource(req, User);
   user.password = req.body.newPassword;
   await user.save();
-  if (user._id.equals(req.user._id)) return regenerateSession(req, res, user)
-  res.status(200).json({ user, selfUpdate: false });
+  res.status(200).json({ user });
 });
 
 export { 

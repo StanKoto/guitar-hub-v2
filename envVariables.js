@@ -4,14 +4,18 @@ dotenv.config({ path: new URL('config.env', import.meta.url) });
 
 export default {
   main: {
+    env: process.env.NODE_ENV,
     port: Number(process.env.PORT)
   },
   db: {
     mongoUri: process.env.MONGO_URI
   },
-  session: {
-    secret: process.env.SESSION_SECRET,
-    cookieMaxAge: Number(process.env.COOKIE_MAX_AGE),
+  jwt: {
+    secret: process.env.JWT_SECRET,
+    expiresIn: Number(process.env.JWT_EXPIRES_IN)
+  },
+  cookie: {
+    maxAge: Number(process.env.COOKIE_MAX_AGE),
   },
   limiter: {
     windowMS: Number(process.env.LIMITER_WINDOW_MS),

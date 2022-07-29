@@ -1,4 +1,6 @@
+import sign from 'jsonwebtoken/sign.js';
 import sharp from 'sharp';
+import config from '../envVariables.js';
 import { User } from '../models/User.js';
 import { ErrorResponse } from '../utils/errorHandling.js';
 
@@ -7,28 +9,14 @@ Promise
   .resolve(fn(req, res, next))
   .catch(next);
 
-const regenerateSession = (req, res, user, status = 200) => {
-  req.session.regenerate(err => {
-    if (err) throw err
-    req.session.user = user._id;
-    req.session.save(err => {
-      if (err) throw err
-      if (req.params.id && !req.body.newPassword) return res.status(status).json({ user, selfUpdate: true });
-      res.status(status).json({ success: true });
-    });
+const createJwtTokenAndSetCookie = (id, res, status = 200) => {
+  const token = sign({ id }, config.jwt.secret, {
+    expiresIn: config.jwt.expiresIn
   });
-};
-
-const clearSessionUser = (req, res, selfDelete) => {
-  req.session.user = null;
-  req.session.save(err => {
-    if (err) throw err
-    req.session.regenerate(err => {
-      if (err) throw err
-      if (selfDelete) return res.status(200).json({ selfDelete })
-      res.status(200).redirect('/auth');
-    });
-  });
+  const cookieOptions = { httpOnly: true, maxAge: config.cookie.maxAge };
+  if (config.main.env === 'production') cookieOptions.secure = true
+  res.cookie('jwt', token, cookieOptions);
+  res.status(status).json({ success: true });
 };
 
 const checkPassword = async (req, user, password) => {
@@ -74,9 +62,8 @@ const processImages = async (req, images) => {
 };
 
 export { 
-  asyncHandler, 
-  regenerateSession, 
-  clearSessionUser, 
+  asyncHandler,
+  createJwtTokenAndSetCookie, 
   checkPassword, 
   checkAuthorship, 
   checkUserStatus,
