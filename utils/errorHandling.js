@@ -48,8 +48,17 @@ const handleErrors = (err, req, res, next) => {
     case 'Invalid credentials':
       errors.credentials = 'Invalid credentials, please check your email and password and try again';
       return res.status(400).json({ errors });
+    case 'Username required':
+      errors.username = 'Please provide a username';
+      return res.status(400).json({ errors });
+    case 'Email required':
+      errors.email = 'Please provide an email';
+      return res.status(400).json({ errors });
     case 'Invalid email':
       errors.email = 'Incorrect email, please try again';
+      return res.status(400).json({ errors });
+    case 'Password required':
+      errors.password = 'Please provide a password';
       return res.status(400).json({ errors });
     case 'Invalid password':
       errors.credentials = 'Incorrect password, please try again';

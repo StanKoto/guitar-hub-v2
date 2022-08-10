@@ -1,6 +1,7 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
+import passport from 'passport';
 import mongoSanitize from 'express-mongo-sanitize';
 import helmet from 'helmet';
 import xss from 'xss-clean';
@@ -9,6 +10,7 @@ import hpp from 'hpp';
 import cors from 'cors';
 import config from './envVariables.js';
 import { checkUser } from './middleware/auth.js';
+import './middleware/passportSetup.js';
 import { authRouter } from './routes/authRoutes.js';
 import { tipRouter } from './routes/tipRoutes.js';
 import { userRouter } from './routes/userRoutes.js';
@@ -32,6 +34,7 @@ app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(passport.initialize());
 
 app.use(mongoSanitize());
 app.use(helmet());

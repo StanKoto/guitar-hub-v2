@@ -10,6 +10,10 @@ export default {
   db: {
     mongoUri: process.env.MONGO_URI
   },
+  googleStrategy: {
+    clientId: process.env.CLIENT_ID,
+    secret: process.env.CLIENT_SECRET
+  },
   jwt: {
     secret: process.env.JWT_SECRET,
     expiresIn: Number(process.env.JWT_EXPIRES_IN)
