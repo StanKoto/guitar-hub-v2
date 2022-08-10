@@ -1,4 +1,5 @@
 import * as crypto from 'crypto';
+import passport from 'passport';
 import { User } from '../models/User.js';
 import { 
   asyncHandler,
@@ -16,21 +17,41 @@ const signup_get = asyncHandler((req, res, next) => {
   res.render('authViews/signup', { title: 'Sign up' });
 });
 
-const signup_post = asyncHandler(async (req, res, next) => {
-  const user = await User.create({ username: req.body.username, email: req.body.email, password: req.body.password });
-  createJwtTokenAndSetCookie(user._id, res, 201);
-});
+const signup_post = (req, res, next) => {
+  passport.authenticate('local-signup', (err, user, info) => {
+    if (err) return next(err)
+    if (!user) {
+      if (!req.body.username) return next(new Error('Username required'))
+      if (!req.body.email) return next(new Error('Email required'))
+      if (!req.body.password) return next(new Error('Password required'))
+    }
+    try {
+      createJwtTokenAndSetCookie(req, res, user, 201);
+    } catch (err) {
+      next(err);
+    }
+  }) (req, res, next);
+};
 
 const login_get = asyncHandler((req, res, next) => {
   res.render('authViews/login', { title: 'Log in' });
 });
 
-const login_post = asyncHandler(async (req, res, next) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email }).select('+password');
-  if (!user) throw new Error('Invalid credentials');
-  await checkPassword(req, user, password);
-  createJwtTokenAndSetCookie(user._id, res);
+const login_post = (req, res, next) => {
+  passport.authenticate('local-login', (err, user, info) => {
+    if (err) return next(err)
+    if (!user) return next(new Error('Invalid credentials'))
+    try {
+      createJwtTokenAndSetCookie(req, res, user);
+    } catch (err) {
+      next(err);
+    }
+  }) (req, res, next);  
+};
+
+const googleLogin_get = asyncHandler((req, res, next) => {
+  const id = req.user;
+  createJwtTokenAndSetCookie(req, res, id);
 });
 
 const forgotPassword_get = asyncHandler(async (req, res, next) => {
@@ -85,7 +106,11 @@ const myDetails_put = asyncHandler(async (req, res, next) => {
 
 const myPassword_put = asyncHandler(async (req, res, next) => {
   const user = await checkResource(req, User, '+password');
-  await checkPassword(req, user, req.body.currentPassword);
+  if (user.passwordSet) {
+    await checkPassword(req, user, req.body.currentPassword)
+  } else {
+    user.passwordSet = true;
+  }
   user.password = req.body.newPassword;
   await user.save();
   res.status(200).json({ success: true });
@@ -101,7 +126,8 @@ export {
   signup_get, 
   signup_post, 
   login_get, 
-  login_post, 
+  login_post,
+  googleLogin_get, 
   forgotPassword_get, 
   forgotPassword_post,
   resetPassword_get,

@@ -1,4 +1,5 @@
 import express from 'express';
+import passport from 'passport';
 import { checkAuthentication } from '../middleware/auth.js';
 import { 
   auth_get, 
@@ -6,6 +7,7 @@ import {
   signup_post, 
   login_get, 
   login_post,
+  googleLogin_get,
   forgotPassword_get,
   forgotPassword_post, 
   resetPassword_get,
@@ -25,6 +27,10 @@ authRouter.route('/signup')
 authRouter.route('/login')
   .get(login_get)
   .post(login_post);
+authRouter.get('/google', passport.authenticate('google', {
+  scope: [ 'email' ]
+}));
+authRouter.get('/google/redirect', passport.authenticate('google', { session: false }), googleLogin_get);
 authRouter.route('/forgot-password')
   .get(forgotPassword_get)
   .post(forgotPassword_post);

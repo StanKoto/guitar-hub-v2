@@ -1,18 +1,17 @@
+import passport from 'passport';
 import verify from 'jsonwebtoken/verify.js';
 import config from '../envVariables.js';
 import { asyncHandler } from '../utils/helperFunctions.js';
 import { User } from '../models/User.js';
 import { ErrorResponse } from '../utils/errorHandling.js';
 
-const checkAuthentication = asyncHandler((req, res, next) => {
-  const token = req.cookies.jwt;
-  if (token) {
-    verify(token, config.jwt.secret, (err, decodedToken) => {
-      if (err) return res.redirect('/auth')
-      next();
-    })
-  } else res.redirect('/auth')
-});
+const checkAuthentication = (req, res, next) => {
+  passport.authenticate('jwt', (err, user, info) => {
+    if (err) return next(err)
+    if (!user) return res.redirect('/auth')
+    next();
+  }) (req, res, next)
+};
 
 const checkUser = asyncHandler((req, res, next) => {
   const token = req.cookies.jwt;
@@ -21,9 +20,9 @@ const checkUser = asyncHandler((req, res, next) => {
       if (err) {
         res.locals.currentUser = null;
         return next();
-      }      
+      }    
       const user = await User.findById(decodedToken.id);
-      if (!user) throw new ErrorResponse(`No user found with ID of ${req.session.user}`)
+      if (!user) throw new ErrorResponse(`No user found with ID of ${decodedToken.id}`)
       req.user = user;
       res.locals.currentUser = user;
       next();

@@ -14,15 +14,25 @@
     </form>
     <br><br>
     <form id="password-form">
-      <span>Change password</span>
-      <br>
-      <label for="currentPassword">Please enter your current password:</label>
-      <input type="password" name="currentPassword" required>
-      <div class="match password error"></div>
-      <label for="newPassword">Please enter your new password:</label>
+      <% if (user.passwordSet) { %>
+        <span>Change password</span>
+        <br>
+        <label for="currentPassword">Please enter your current password:</label>
+        <input type="password" name="currentPassword" required>
+        <div class="match password error"></div>
+        <label for="newPassword">Please enter your new password:</label>
+      <% } else { %>
+        <span>Set password for local login</span>
+        <br>
+        <label for="newPassword">Please choose a password:</label>
+      <% } %>
       <input type="password" name="newPassword" required>
       <div class="validate password error"></div>
-      <button>Update profile password</button>
+      <% if (user.passwordSet) { %>
+        <button>Update profile password</button>
+      <% } else { %>
+        <button>Set profile password</button>
+      <% } %>
     </form>
     <br><br>
     <span><a class="btn" href="/">Go back to main menu</a></span>

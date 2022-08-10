@@ -9,13 +9,14 @@ Promise
   .resolve(fn(req, res, next))
   .catch(next);
 
-const createJwtTokenAndSetCookie = (id, res, status = 200) => {
+const createJwtTokenAndSetCookie = (req, res, id, status = 200) => {
   const token = sign({ id }, config.jwt.secret, {
     expiresIn: config.jwt.expiresIn
   });
   const cookieOptions = { httpOnly: true, maxAge: config.cookie.maxAge };
   if (config.main.env === 'production') cookieOptions.secure = true
   res.cookie('jwt', token, cookieOptions);
+  if (req.method === 'GET') return res.redirect('/')
   res.status(status).json({ success: true });
 };
 

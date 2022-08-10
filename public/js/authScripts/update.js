@@ -2,14 +2,19 @@ import { emptyErrors, makeRequest } from '../modules/helpers.js';
 
 const detailsForm = document.getElementById('details-form');
 const passwordForm = document.getElementById('password-form');
+const matchPasswordErrorElement = document.querySelector('.match.password.error');
 
 const usernameError = { element: document.querySelector('.username.error'), errorType: 'username' };
 const emailError = { element: document.querySelector('.email.error'), errorType: 'email' };
-const matchPasswordError = { element: document.querySelector('.match.password.error'), errorType: 'credentials' };
+let matchPasswordError;
 const validatePasswordError = { element: document.querySelector('.validate.password.error'), errorType: 'password' };
 
 const customDetailsErrors = [ usernameError, emailError ];
-const customPasswordErrors = [ matchPasswordError, validatePasswordError ];
+const customPasswordErrors = [ validatePasswordError ];
+if (matchPasswordErrorElement) {
+  matchPasswordError = { element: matchPasswordErrorElement, errorType: 'credentials' };
+  customPasswordErrors.unshift(matchPasswordError);
+}
 
 const method = 'PUT';
 const redirectUrl = location.pathname;
@@ -36,12 +41,13 @@ passwordForm.addEventListener('submit', async (e) => {
 
   emptyErrors(customPasswordErrors);
 
-  const currentPassword = passwordForm.currentPassword.value;
-  const newPassword = passwordForm.newPassword.value;
-
   const url = `${location.pathname}/my-password`;
-  const body = JSON.stringify({ currentPassword, newPassword });
-  const message = 'You have successfully updated your password and should use it for future authorization from now on!';
+  let body = {};
+  const currentPasswordElement = passwordForm.currentPassword;
+  if (currentPasswordElement) body.currentPassword = currentPasswordElement.value;
+  body.newPassword = passwordForm.newPassword.value;
+  body = JSON.stringify(body);
+  const message = currentPasswordElement ? 'You have successfully updated your password and can use it for future authorization from now on!' : 'You have successfully set your password and can use it for local login from now on!';
 
   await makeRequest(url, method, redirectUrl, body, customPasswordErrors, message);
 });

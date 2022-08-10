@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [ true, 'Please provide a username' ],
     unique: true,
-    maxLength: [ 25, 'Maximum username length is 25 characters' ]
+    maxLength: [ 30, 'Maximum username length is 30 characters' ]
   },
   slug: String,
   email: {
@@ -21,9 +21,13 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [ true, 'Please provide a password' ],
+    required: [ function () { return this.passwordSet === true }, 'Please provide a password' ],
     minLength: [ 6, 'Minimum password length is 6 characters' ],
     select: false
+  },
+  passwordSet: {
+    type: Boolean,
+    default: true
   },
   tipCount: {
     type: Number,
