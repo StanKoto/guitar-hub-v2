@@ -49,10 +49,17 @@ const login_post = (req, res, next) => {
   }) (req, res, next);  
 };
 
-const googleLogin_get = asyncHandler((req, res, next) => {
-  const id = req.user;
-  createJwtTokenAndSetCookie(req, res, id);
-});
+const googleLogin_get = (req, res, next) => {
+  passport.authenticate('google', (err, user, info) => {
+    if (err) return next(err)
+    if (!user) res.redirect('/auth')
+    try {
+      createJwtTokenAndSetCookie(req, res, user.id, user.status);
+    } catch (err) {
+      next(err);
+    }
+  }) (req, res, next);
+};
 
 const forgotPassword_get = asyncHandler(async (req, res, next) => {
   res.render('authViews/forgotPassword', { title: 'Forgot password' });

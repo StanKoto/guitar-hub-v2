@@ -22,7 +22,7 @@ const checkUser = asyncHandler((req, res, next) => {
         return next();
       }    
       const user = await User.findById(decodedToken.id);
-      if (!user) throw new ErrorResponse(`No user found with ID of ${decodedToken.id}`)
+      if (!user) throw new ErrorResponse(`No user found with ID of ${decodedToken.id}`, 404)
       req.user = user;
       res.locals.currentUser = user;
       next();
