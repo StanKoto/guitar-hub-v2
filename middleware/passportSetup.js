@@ -1,7 +1,7 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
+import { Strategy as JwtStrategy } from 'passport-jwt';
 import config from '../envVariables.js';
 import { User } from '../models/User.js';
 import { checkPassword } from '../utils/helperFunctions.js';
@@ -45,17 +45,13 @@ passport.use(new GoogleStrategy({
 }, async (accessToken, refreshToken, profile, done) => {
   try {
     const currentUser = await User.findOne({ email: profile.emails[0].value });
-    if (currentUser) return done(null, currentUser._id)
-  } catch (err) {
-    done(err);
-  }
-  try {
+    if (currentUser) return done(null, { id: currentUser._id, status: 200 })
     const newUser = await User.create({
       username: profile.emails[0].value.split('@')[0],
       email: profile.emails[0].value,
       passwordSet: false
     });
-    done(null, newUser._id);
+    done(null, { id: newUser._id, status: 201 });
   } catch (err) {
     done(err);
   }

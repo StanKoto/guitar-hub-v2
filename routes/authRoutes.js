@@ -27,10 +27,8 @@ authRouter.route('/signup')
 authRouter.route('/login')
   .get(login_get)
   .post(login_post);
-authRouter.get('/google', passport.authenticate('google', {
-  scope: [ 'email' ]
-}));
-authRouter.get('/google/redirect', passport.authenticate('google', { session: false }), googleLogin_get);
+authRouter.get('/google', passport.authenticate('google', { scope: [ 'email' ], failureRedirect: '/auth' }));
+authRouter.get('/google/redirect', googleLogin_get);
 authRouter.route('/forgot-password')
   .get(forgotPassword_get)
   .post(forgotPassword_post);
