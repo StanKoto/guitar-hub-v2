@@ -24,7 +24,8 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
         foreignKey: {
-          type: DataTypes.UUID
+          type: DataTypes.UUID,
+          allowNull: false
         }
       })
     }
@@ -53,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4
     },
     title: { 
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(5000),
       allowNull: false,
       validate: {
         notNull: {

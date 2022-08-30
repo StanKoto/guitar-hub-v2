@@ -15,6 +15,7 @@ module.exports = {
         },
         tip: {
           type: Sequelize.UUID,
+          allowNull: false,
           references: {
             model: 'Tips',
             key: 'id'

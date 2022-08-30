@@ -5,9 +5,9 @@ import { User } from './models/User.js';
 import { Tip } from './models/Tip.js';
 import { Rating } from './models/Rating.js';
 
-const users = JSON.parse(fs.readFileSync(new URL('data/users.json', import.meta.url)), 'utf-8');
-const tips = JSON.parse(fs.readFileSync(new URL('data/tips.json', import.meta.url)), 'utf-8');
-const ratings = JSON.parse(fs.readFileSync(new URL('data/ratings.json', import.meta.url)), 'utf-8');
+const users = JSON.parse(fs.readFileSync(new URL('data/users.json', import.meta.url), 'utf-8'));
+const tips = JSON.parse(fs.readFileSync(new URL('data/tips.json', import.meta.url), 'utf-8'));
+const ratings = JSON.parse(fs.readFileSync(new URL('data/ratings.json', import.meta.url), 'utf-8'));
 
 const insertData = async () => {
   await User.create(users);

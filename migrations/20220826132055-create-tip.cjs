@@ -17,7 +17,7 @@ module.exports = {
           type: Sequelize.STRING
         },
         contents: {
-          type: Sequelize.STRING,
+          type: Sequelize.STRING(5000),
           allowNull: false
         },
         category: {
