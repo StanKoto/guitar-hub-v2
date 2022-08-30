@@ -2,7 +2,7 @@ import * as crypto from 'crypto';
 import mongoose from 'mongoose';
 import isEmail from 'validator/lib/isEmail.js';
 import slugify from 'slugify';
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -53,9 +53,11 @@ userSchema.index({ username: 'text', email: 'text' });
 
 userSchema.pre('save', async function (next) {
   if (this.isModified('username')) this.slug = slugify(this.username, { lower: true })
-  if (!this.isModified('password')) return next()
-  const saltRounds = 10;
-  this.password = await bcrypt.hash(this.password, saltRounds);
+  if (this.password) {
+    if (!this.isModified('password')) return next()
+    const saltRounds = 10;
+    this.password = await bcrypt.hash(this.password, saltRounds);
+  }
 });
 
 userSchema.pre('remove', async function () {

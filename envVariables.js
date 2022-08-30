@@ -8,7 +8,8 @@ export default {
     port: Number(process.env.PORT)
   },
   db: {
-    mongoUri: process.env.MONGO_URI
+    mongoUri: process.env.MONGO_URI,
+    pgUri: process.env.PG_URI
   },
   googleStrategy: {
     clientId: process.env.CLIENT_ID,
