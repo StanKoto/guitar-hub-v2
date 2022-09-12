@@ -21,6 +21,15 @@ module.exports = (sequelize, DataTypes) => {
         }
       });
 
+      this.belongsToMany(models.User, {
+        as: 'reviewers',
+        through: models.TipReviewers,
+        foreignKey: 'reviewedTipId',
+        otherKey: 'reviewerId',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+      });
+
       this.hasMany(models.Rating, {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',

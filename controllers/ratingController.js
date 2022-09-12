@@ -1,7 +1,7 @@
 import db from '../models/index.cjs';
 import { asyncHandler, checkUserStatus, checkResource } from '../utils/helperFunctions.js';
 
-const { Rating, Tip, sequelize } = db;
+const { Rating, Tip, TipReviewers, sequelize } = db;
 
 const ratings_get = asyncHandler(async (req, res, next) => {
   let title;
@@ -28,6 +28,12 @@ const ratings_post = asyncHandler(async (req, res, next) => {
       recipientId: tip.authorId
     },
     {
+      transaction: t
+    });
+    await TipReviewers.create({
+      reviewerId: req.user.id,
+      reviewedTipId: tip.id
+    }, {
       transaction: t
     });
     await checkUserStatus(req, t);
