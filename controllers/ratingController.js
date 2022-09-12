@@ -1,6 +1,7 @@
-import { Rating } from '../models/Rating.js';
-import { Tip } from '../models/Tip.js';
+import db from '../models/index.cjs';
 import { asyncHandler, checkUserStatus, checkResource } from '../utils/helperFunctions.js';
+
+const { Rating, Tip, sequelize } = db;
 
 const ratings_get = asyncHandler(async (req, res, next) => {
   let title;
@@ -18,15 +19,19 @@ const ratings_get = asyncHandler(async (req, res, next) => {
 
 const ratings_post = asyncHandler(async (req, res, next) => {
   const tip = await checkResource(req, Tip);
-  if (tip.author && tip.author.equals(req.user._id)) throw new Error('Own tip rated')
-  const rating = new Rating({
-    rating: req.body.rating, 
-    tip: tip._id, 
-    reviewer: req.user._id,
-    recipient: tip.author
+  if (tip.authorId && tip.authorId === req.user.id) throw new Error('Own tip rated')
+  await sequelize.transaction(async t => {
+    await Rating.create({
+      rating: req.body.rating, 
+      tipId: tip.id, 
+      reviewerId: req.user.id,
+      recipientId: tip.authorId
+    },
+    {
+      transaction: t
+    });
+    await checkUserStatus(req, t);
   });
-  await rating.save();
-  await checkUserStatus(req);
   res.status(201).json({ success: true });
 });
 

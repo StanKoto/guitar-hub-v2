@@ -30,16 +30,16 @@ const makeRequest = async (url, method, redirectUrl, body, customErrors, message
       if (data.selfUpdate && data.user.role === 'user') return location.assign('/auth/my-profile')
       switch (redirectUrl) {
         case 'tip':
-          redirectUrl = `/tips-overview/tips/${data.tip._id}/${data.tip.slug}`;
+          redirectUrl = `/tips-overview/tips/${data.tip.id}/${data.tip.slug}`;
           break;
         case 'tip-edit-form':
-          redirectUrl = `/tips-overview/tips/${data.tip._id}/${data.tip.slug}/tip-edit-form`;
+          redirectUrl = `/tips-overview/tips/${data.tip.id}/${data.tip.slug}/tip-edit-form`;
           break;
         case 'user':
-          redirectUrl = `/user-management/users/${data.user._id}/${data.user.slug}`;
+          redirectUrl = `/user-management/users/${data.user.id}/${data.user.slug}`;
           break;
         case 'user-edit-form':
-          redirectUrl = `/user-management/users/${data.user._id}/${data.user.slug}/user-edit-form`;
+          redirectUrl = `/user-management/users/${data.user.id}/${data.user.slug}/user-edit-form`;
           break;
       }
       if (data.selfDelete) return location.assign('/auth')

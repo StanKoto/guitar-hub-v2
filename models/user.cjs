@@ -1,7 +1,7 @@
 'use strict';
 const crypto = require('crypto');
 const { Model } = require('sequelize');
-const SequelizeSlugify = require('sequelize-sligify');
+const SequelizeSlugify = require('sequelize-slugify');
 const useBcrypt = require('sequelize-bcrypt');
 
 module.exports = (sequelize, DataTypes) => {
@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
         foreignKey: {
-          name: 'author',
+          name: 'authorId',
           type: DataTypes.UUID
         }
       });
@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
         foreignKey: {
-          name: 'reviewer',
+          name: 'reviewerId',
           type: DataTypes.UUID
         }
       });
@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
         foreignKey: {
-          name: 'recipient',
+          name: 'recipientId',
           type: DataTypes.UUID
         }
       });
@@ -120,16 +120,11 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'User',
     hooks: {
-      beforeBulkCreate: (users, options) => {
-        for (const user of users) {
-          user.email = user.email.toLowerCase();
-        }
-      },
       beforeCreate: (user, options) => {
         user.email = user.email.toLowerCase();
       },
       beforeSave: (user, options) => {
-        if (this.changed('email')) user.email = user.email.toLowerCase()
+        if (user.changed('email')) user.email = user.email.toLowerCase()
       }
     }
   });

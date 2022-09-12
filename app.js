@@ -1,14 +1,14 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import mongoose from 'mongoose';
 import passport from 'passport';
-import mongoSanitize from 'express-mongo-sanitize';
+import sqlSanitizer from 'sql-sanitizer';
 import helmet from 'helmet';
 import xss from 'xss-clean';
 import rateLimit from 'express-rate-limit';
 import hpp from 'hpp';
 import cors from 'cors';
-import config from './envVariables.js';
+import config from './envVariables.cjs';
+import db from './models/index.cjs';
 import { checkUser } from './middleware/auth.js';
 import './middleware/passportSetup.js';
 import { authRouter } from './routes/authRoutes.js';
@@ -21,9 +21,9 @@ import { handleErrors } from './utils/errorHandling.js';
 const app = express();
 const PORT = config.main.port || 3000;
 
-mongoose.connect(config.db.mongoUri)
+db.sequelize.authenticate()
   .then(res => {
-    console.log('MongoDB successfully connected');
+    console.log('PostgreSQL successfully connected');
     app.listen(PORT, console.log(`Listening on port ${PORT}`));
   })
   .catch(err => console.error(err));
@@ -36,7 +36,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(passport.initialize());
 
-app.use(mongoSanitize());
+app.use(sqlSanitizer);
 app.use(helmet());
 app.use(xss());
 

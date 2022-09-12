@@ -1,35 +1,47 @@
-export const searchResults = (model, populate) => async (req, res, next) => {
-  let results;
+export const searchResults = (model, associatedModels) => async (req, res, next) => {
+  let results,
+      queryOptions = {};
   const query = { ...req.query };
   const excludedFields = [ 'select', 'sort', 'textSearch', 'page', 'limit' ];
   for (const param of excludedFields) {
     delete query[param];
   }
-  let queryString = JSON.stringify(query).replace(/\bgt|gte|lt|lte|in\b/g, match => `$${match}`);
+  let queryString = JSON.stringify(query).replace(/\bgt|gte|lt|lte|in\b/g, match => `[Op.${match}]`);
   const adjustedQuery = JSON.parse(queryString);
-  if (req.baseUrl.includes('tip-ratings')) adjustedQuery.tip = req.params.id
-  if (req.path.includes('given-ratings')) adjustedQuery.reviewer = req.params.id
-  if (req.path.includes('received-ratings')) adjustedQuery.recipient = req.params.id
-  if (req.query.textSearch) adjustedQuery['$text'] = { $search: req.query.textSearch.split(',').join(' ') }
-  results = req.query.textSearch ? model.find(adjustedQuery, { score: { $meta: 'textScore' } }) : model.find(adjustedQuery)
-  if (req.query.select) results = results.select(req.query.select.split(',').join(' '))
-  if (populate) {
-    for (const field of populate) {
-      results = results.populate(field);
+  if (req.baseUrl.includes('tip-ratings')) adjustedQuery.tipId = req.params.id
+  if (req.path.includes('given-ratings')) adjustedQuery.reviewerId = req.params.id
+  if (req.path.includes('received-ratings')) adjustedQuery.recipientId = req.params.id
+  // if (req.query.textSearch) adjustedQuery['$text'] = { $search: req.query.textSearch.split(',').join(' ') }
+  // results = req.query.textSearch ? model.find(adjustedQuery, { score: { $meta: 'textScore' } }) : model.find(adjustedQuery)
+  if (Object.keys(adjustedQuery).length !== 0) queryOptions.where = adjustedQuery;
+  if (req.query.select) queryOptions.attributes = req.query.select.split(',')
+  if (associatedModels) queryOptions.include = associatedModels
+  // if (req.query.textSearch) results = results.sort({ score: { $meta: 'textScore' } })
+  if (req.query.sort) {
+    queryOptions.order = [];
+    let sortingParams = req.query.sort.split(',');
+    for (const param of sortingParams) {
+      if (param.startsWith('-')) {
+        queryOptions.order.push([ param.substring(1), 'DESC', 'NULLS LAST' ]);
+      } else {
+        queryOptions.order.push([ param, 'ASC', 'NULLS LAST' ]);
+      }
     }
+  } else {
+    queryOptions.order = [[ 'createdAt', 'DESC', 'NULLS LAST' ]];
   }
-  if (req.query.textSearch) results = results.sort({ score: { $meta: 'textScore' } })
-  results = req.query.sort ? results.sort(req.query.sort.split(',').join(' ')) : results.sort('-createdAt')
   const page = parseInt(req.query.page, 10) || 1;
   const limit = parseInt(req.query.limit, 10) || 25;
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
-  const total = await model.countDocuments();
-  results = await results.skip(startIndex).limit(limit);
+  // const total = await model.countDocuments();
+  Object.assign(queryOptions, { offset: startIndex, limit });
+  results = await model.findAndCountAll(queryOptions);
   const pagination = {};
+  const total = results.count;
   if (startIndex > 0) pagination.prev = page - 1
   if (endIndex < total) pagination.next = page + 1
 
-  res.searchResults = { results, pagination };
+  res.searchResults = { results: results.rows, pagination };
   next();
 };

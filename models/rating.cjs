@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
         foreignKey: {
+          name: 'tipId',
           type: DataTypes.UUID,
           allowNull: false
         }
@@ -22,8 +23,9 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.User, {
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
+        as: 'reviewer',
         foreignKey: {
-          name: 'reviewer',
+          name: 'reviewerId',
           type: DataTypes.UUID
         }
       });
@@ -31,31 +33,38 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.User, {
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
+        as: 'recipient',
         foreignKey: {
-          name: 'recipient',
+          name: 'recipientId',
           type: DataTypes.UUID
         }
       });
     }
 
     async getAverageRating(options) {
-      const averageRating = await sequelize.query('SELECT AVG(rating) FROM Ratings WHERE tip = ?;', {
-        replacements: [ this.tip ],
+      const averageRating = await sequelize.query('SELECT AVG(rating) FROM "Ratings" WHERE "Ratings"."tipId" = ?;', {
+        replacements: [ this.tipId ],
         type: QueryTypes.SELECT,
         raw: true,
         plain: true,
         transaction: options.transaction
       });
 
-      await sequelize.models.Tip.update({ averageRating }, {
+      await sequelize.models.Tip.update({ averageRating: averageRating.avg }, {
         where: {
-          id: this.tip
+          id: this.tipId
         },
         transaction: options.transaction
       });
     }
   }
   Rating.init({
+    id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4
+    },
     rating: {
       type: DataTypes.INTEGER,
       allowNull: false,

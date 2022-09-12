@@ -4,12 +4,14 @@
     <br><br>
     <p><%= tip.contents %></p>
     <br><br>
-    <span>
-      <% for (const image of tip.images) { %>
-        <img src="data:image/png;base64,<%= image.toString('base64') %>" alt="Tip image">
-      <% } %>
-    </span>
-    <br><br>
+    <% if (tip.images) { %>
+      <span>
+        <% for (const image of tip.images) { %>
+          <img src="data:image/png;base64,<%= image.toString('base64') %>" alt="Tip image">
+        <% } %>
+      </span>
+      <br><br>
+    <% } %>
     <div>
       <p>Category: <%= tip.category %></p>
       <a class="btn" href="/tips-overview/tips?category=<%= tip.category %>">View all tips in this category</a>
@@ -20,13 +22,13 @@
         <p>Author: <%= tip.author.username %></p>
         <% if (tip.author && currentUser) { %>
           <span>
-            <% if (tip.author._id.equals(currentUser._id)) { %>
-              <a class="btn" href="/tips-overview/tips?author=<%= currentUser._id %>">View all my published tips</a>
+            <% if (tip.authorId === currentUser.id) { %>
+              <a class="btn" href="/tips-overview/tips?authorId=<%= currentUser.id %>">View all my published tips</a>
             <% } else { %>
-              <a class="btn" href="/tips-overview/tips?author=<%= tip.author._id %>">View this author's other tips</a>
+              <a class="btn" href="/tips-overview/tips?authorId=<%= tip.authorId %>">View this author's other tips</a>
             <% } %>
             <% if (currentUser.role === 'admin') { %>
-              <a class="btn" href="/user-management/users/<%= tip.author._id %>/<%= tip.author.slug %>">
+              <a class="btn" href="/user-management/users/<%= tip.authorId %>/<%= tip.author.slug %>">
                 View tip's author page
               </a>
             <% } %>
@@ -43,7 +45,7 @@
         <% } %>
       </div>
     <% } %>
-    <% if (currentUser && notRated && (!tip.author || tip.author && !tip.author._id.equals(currentUser._id))) { %>
+    <% if (currentUser && notRated && (!tip.authorId || tip.authorId !== currentUser.id)) { %>
       <br><br>
       <p>Rate this tip:</p>
       <form class="custom util rating form">
@@ -62,7 +64,7 @@
         <div class="rating error"></div>
       </form>
     <% } %>
-    <% if (currentUser && (currentUser.role === 'admin' || (tip.author && tip.author._id.equals(currentUser._id)))) { %>
+    <% if (currentUser && (currentUser.role === 'admin' || (tip.authorId && tip.authorId === currentUser.id))) { %>
       <br>
       <span>
         <a class="btn" href="<%= path %>/tip-edit-form">Update tip</a>

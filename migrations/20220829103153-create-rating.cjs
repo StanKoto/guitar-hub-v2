@@ -13,7 +13,7 @@ module.exports = {
           type: Sequelize.INTEGER,
           allowNull: false
         },
-        tip: {
+        tipId: {
           type: Sequelize.UUID,
           allowNull: false,
           references: {
@@ -23,7 +23,7 @@ module.exports = {
           onDelete: 'CASCADE',
           onUpdate: 'CASCADE'
         },
-        reviewer: {
+        reviewerId: {
           type: Sequelize.UUID,
           references: {
             model: 'Users',
@@ -32,7 +32,7 @@ module.exports = {
           onDelete: 'SET NULL',
           onUpdate: 'CASCADE'
         },
-        recipient: {
+        recipientId: {
           type: Sequelize.UUID,
           references: {
             model: 'Users',

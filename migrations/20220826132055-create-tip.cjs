@@ -26,9 +26,9 @@ module.exports = {
           allowNull: false
         },
         averageRating: {
-          type: Sequelize.DECIMAL(1)
+          type: Sequelize.DECIMAL(10, 1)
         },
-        author: {
+        authorId: {
           type: Sequelize.UUID,
           references: {
             model: 'Users',

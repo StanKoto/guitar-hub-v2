@@ -14,8 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.User, {
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
+        as: 'author',
         foreignKey: {
-          name: 'author',
+          name: 'authorId',
           type: DataTypes.UUID
         }
       });
@@ -24,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
         foreignKey: {
+          name: 'tipId',
           type: DataTypes.UUID,
           allowNull: false
         }
@@ -33,14 +35,14 @@ module.exports = (sequelize, DataTypes) => {
     async getTipCount(options) {
       const tipCount = await sequelize.models.Tip.count({
         where: {
-          author: this.author
+          authorId: this.authorId
         },
         transaction: options.transaction
       });
 
       await sequelize.models.User.update({ tipCount }, {
         where: {
-          id: this.author
+          id: this.authorId
         },
         transaction: options.transaction
       });
@@ -90,7 +92,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    averageRating: DataTypes.DECIMAL(1)
+    averageRating: DataTypes.DECIMAL(10, 1)
   }, {
     sequelize,
     modelName: 'Tip',

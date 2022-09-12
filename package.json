@@ -36,6 +36,7 @@
     "sequelize-slugify": "^1.6.1",
     "sharp": "^0.30.7",
     "slugify": "^1.6.5",
+    "sql-sanitizer": "^1.0.0",
     "validator": "^13.7.0",
     "xss-clean": "^0.1.1"
   },

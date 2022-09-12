@@ -1,9 +1,11 @@
 import passport from 'passport';
 import verify from 'jsonwebtoken/verify.js';
-import config from '../envVariables.js';
+import config from '../envVariables.cjs';
 import { asyncHandler } from '../utils/helperFunctions.js';
-import { User } from '../models/User.js';
+import db from '../models/index.cjs';
 import { ErrorResponse } from '../utils/errorHandling.js';
+
+const { User } = db;
 
 const checkAuthentication = (req, res, next) => {
   passport.authenticate('jwt', (err, user, info) => {
@@ -21,7 +23,7 @@ const checkUser = asyncHandler((req, res, next) => {
         res.locals.currentUser = null;
         return next();
       }    
-      const user = await User.findById(decodedToken.id);
+      const user = await User.findByPk(decodedToken.id, { exclude: [ 'password' ] });
       if (!user) throw new ErrorResponse(`No user found with ID of ${decodedToken.id}`, 404)
       req.user = user;
       res.locals.currentUser = user;

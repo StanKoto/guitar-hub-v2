@@ -7,7 +7,7 @@
     <tr><td>Role: </td><td class="center"><%= user.role %></td></tr>
     <tr>
       <td>Tips published: <%= user.tipCount %></td>
-      <td class="center"><a class="btn" href="/tips-overview/tips?author=<%= user._id %>">View all user's tips</a></td>
+      <td class="center"><a class="btn" href="/tips-overview/tips?authorId=<%= user.id %>">View all user's tips</a></td>
     </tr>
   </table>
   <br><br>

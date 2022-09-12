@@ -1,7 +1,7 @@
 import express from 'express';
 import { checkAuthentication, checkRole } from '../middleware/auth.js';
 import { searchResults } from '../middleware/searchResults.js';
-import { User } from '../models/User.js';
+import db from '../models/index.cjs';
 import {
   userManagement_get, 
   newUserForm_get, 
@@ -14,6 +14,8 @@ import {
   userPassword_put 
 } from '../controllers/userController.js';
 import { userRatingRouter } from '../routes/userRatingRoutes.js';
+
+const { User } = db;
 
 const userRouter = express.Router();
 
