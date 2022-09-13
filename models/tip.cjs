@@ -23,8 +23,8 @@ module.exports = (sequelize, DataTypes) => {
 
       this.belongsToMany(models.User, {
         as: 'reviewers',
-        through: models.TipReviewers,
-        foreignKey: 'reviewedTipId',
+        through: models.Rating,
+        foreignKey: 'tipId',
         otherKey: 'reviewerId',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE'

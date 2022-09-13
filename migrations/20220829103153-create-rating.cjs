@@ -52,6 +52,11 @@ module.exports = {
       }, {
         transaction: t
       });
+
+      await queryInterface.addIndex('Ratings', [ 'tipId', 'reviewerId' ], {
+        unique: true,
+        transaction: t
+      });
     });
   },
   async down(queryInterface, Sequelize) {

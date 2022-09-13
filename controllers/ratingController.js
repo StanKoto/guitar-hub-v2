@@ -30,12 +30,6 @@ const ratings_post = asyncHandler(async (req, res, next) => {
     {
       transaction: t
     });
-    await TipReviewers.create({
-      reviewerId: req.user.id,
-      reviewedTipId: tip.id
-    }, {
-      transaction: t
-    });
     await checkUserStatus(req, t);
   });
   res.status(201).json({ success: true });

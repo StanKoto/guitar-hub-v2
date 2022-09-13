@@ -81,6 +81,12 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Rating',
+    indexes: [
+      {
+        unique: true,
+        fields: [ 'tipId', 'reviewerId' ]
+      }
+    ],
     hooks: {
       afterCreate: async (rating, options) => {
         try {
