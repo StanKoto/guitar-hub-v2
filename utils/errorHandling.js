@@ -6,6 +6,7 @@ class ErrorResponse extends Error {
 }
 
 const handleErrors = (err, req, res, next) => {
+  console.log(err.message);
   let errors = { 
     username: '', 
     email: '', 
@@ -19,23 +20,26 @@ const handleErrors = (err, req, res, next) => {
     rating: ''
   };
 
-  if (err.code === 11000) {
-    if ('tip' in err.keyValue && 'reviewer' in err.keyValue) {
+  if (err.parent && err.parent.code === '23505') {
+    if (err.parent.constraint === 'ratings_tip_id_reviewer_id') {
       errors.rating = 'You have already rated this tip';
     } else {
-      errors[Object.keys(err.keyValue)[0]] = `That ${Object.keys(err.keyValue)[0]} is already registered`;
+      const errorField = err.parent.constraint.split('_')[1];
+      errors[errorField] = `That ${errorField} is already registered`;
     }
     return res.status(400).json({ errors });
   }
 
-  if (err.name === 'ValidationError') {
-    for (const { properties } of Object.values(err.errors)) {
-      errors[properties.path] = properties.message;
+  if (err.name === 'SequelizeValidationError') {
+    for (const validationErrorItem of err.errors) {
+      errors[validationErrorItem.path] = validationErrorItem.message;
     }
     return res.status(400).json({ errors });
   }
   
-  if (err.name === 'CastError') err = new ErrorResponse(`Resource not found with ID of ${err.value}`, 404)
+  if (err.parent && err.parent.code === '22P02') { 
+    err = new ErrorResponse(`Resource not found with ID of ${err.message.split(': ')[1]}`, 404);
+  }
 
   if (err.statusCode) {
     if (req.method === 'GET') {

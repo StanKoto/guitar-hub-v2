@@ -32,7 +32,7 @@ passport.use('local-login', new LocalStrategy({
 }, async (req, email, password, done) => {
   try {
     const user = await User.findOne({ where: { email } });
-    if (!user) done(null, false);
+    if (!user) return done(null, false);
     checkPassword(req, user, password);
     done(null, user.id);
   } catch (err) {
@@ -68,5 +68,5 @@ passport.use(new JwtStrategy({
   secretOrKey: config.jwt.secret
 }, (jwtPayload, done) => {
   if (!jwtPayload.id) return done(null, false)
-  return done(null, jwtPayload.id);
+  done(null, jwtPayload.id);
 }));
