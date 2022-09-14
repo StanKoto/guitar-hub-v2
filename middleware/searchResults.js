@@ -1,4 +1,4 @@
-import { Op } from "sequelize";
+import { Sequelize, Op } from "sequelize";
 
 export const searchResults = (model, associatedModels) => async (req, res, next) => {
   let results,
@@ -15,22 +15,30 @@ export const searchResults = (model, associatedModels) => async (req, res, next)
       for (const key in paramWithOperator) {
         if (searchOperators.includes(key)) {
           const searchValue = key === 'in' ? paramWithOperator[key].split(',') : paramWithOperator[key]
-          Object.assign(paramWithOperator, { [Op[key]]: searchValue });
+          Object.assign(paramWithOperator, { [ Op[key] ]: searchValue });
           delete paramWithOperator[key];
         }
       }
     }
   }
-  console.log(query);
   if (req.baseUrl.includes('tip-ratings')) query.tipId = req.params.id
   if (req.path.includes('given-ratings')) query.reviewerId = req.params.id
   if (req.path.includes('received-ratings')) query.recipientId = req.params.id
-  // if (req.query.textSearch) query['$text'] = { $search: req.query.textSearch.split(',').join(' ') }
-  // results = req.query.textSearch ? model.find(query, { score: { $meta: 'textScore' } }) : model.find(query)
   if (Object.keys(query).length !== 0) queryOptions.where = query;
+  if (req.query.textSearch) {
+    if (!queryOptions.where) queryOptions.where = {};
+    const searchedText = req.query.textSearch.split(' ').join(' & ');
+    const firstSearchField = model.name === 'User' ? 'username' : 'title';
+    const secondSearchField = model.name === 'User' ? 'email' : 'contents';
+    Object.assign(queryOptions.where, { 
+      [ Op.or ]: [
+        { [ firstSearchField ]: { [ Op.match ]: Sequelize.fn('to_tsquery', `${searchedText}`) } },
+        { [ secondSearchField ]: { [ Op.match ]: Sequelize.fn('to_tsquery', `${searchedText}`) } }
+      ]
+    })
+  }
   if (req.query.select) queryOptions.attributes = req.query.select.split(',')
   if (associatedModels) queryOptions.include = associatedModels
-  // if (req.query.textSearch) results = results.sort({ score: { $meta: 'textScore' } })
   if (req.query.sort) {
     queryOptions.order = [];
     let sortingParams = req.query.sort.split(',');
@@ -48,7 +56,6 @@ export const searchResults = (model, associatedModels) => async (req, res, next)
   const limit = parseInt(req.query.limit, 10) || 25;
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
-  // const total = await model.countDocuments();
   Object.assign(queryOptions, { offset: startIndex, limit });
   results = await model.findAndCountAll(queryOptions);
   const pagination = {};

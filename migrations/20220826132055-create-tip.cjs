@@ -14,7 +14,7 @@ module.exports = {
             defaultValue: Sequelize.literal('uuid_generate_v4()')
           },
           title: {
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(50),
             allowNull: false
           },
           slug: {

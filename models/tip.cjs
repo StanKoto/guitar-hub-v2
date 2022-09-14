@@ -65,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4
     },
     title: { 
-      type: DataTypes.STRING(5000),
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notNull: {
