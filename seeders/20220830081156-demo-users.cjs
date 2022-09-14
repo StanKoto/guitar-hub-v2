@@ -16,18 +16,26 @@ for (const user of users) {
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-   await queryInterface.sequelize.transaction(async t => {
-     await queryInterface.bulkInsert('Users', users, {
-        transaction: t
-      })
-    });
+    try {
+      await queryInterface.sequelize.transaction(async t => {
+        await queryInterface.bulkInsert('Users', users, {
+          transaction: t
+        })
+      });
+    } catch (err) {
+      console.error(err);
+    }
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.sequelize.transaction(async t => {
-      await queryInterface.bulkDelete('Users', null, {
-        transaction: t
+    try {
+      await queryInterface.sequelize.transaction(async t => {
+        await queryInterface.bulkDelete('Users', null, {
+          transaction: t
+        });
       });
-    });
+    } catch (err) {
+      console.error(err);
+    }
   }
 };

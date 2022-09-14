@@ -14,18 +14,26 @@ for (const tip of tips) {
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.sequelize.transaction(async t => {
-      await queryInterface.bulkInsert('Tips', tips, {
-        transaction: t
+    try {
+      await queryInterface.sequelize.transaction(async t => {
+        await queryInterface.bulkInsert('Tips', tips, {
+          transaction: t
+        });
       });
-    });
+    } catch (err) {
+      console.error(err);
+    }
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.sequelize.transaction(async t => {
-      await queryInterface.bulkDelete('Tips', null, {
-        transaction: t
+    try {
+      await queryInterface.sequelize.transaction(async t => {
+        await queryInterface.bulkDelete('Tips', null, {
+          transaction: t
+        });
       });
-    });
+    } catch (err) {
+      console.error(err);
+    }
   }
 };

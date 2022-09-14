@@ -12,18 +12,26 @@ for (const rating of ratings) {
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.sequelize.transaction(async t => {
-      await queryInterface.bulkInsert('Ratings', ratings, {
-        transaction: t
+    try {
+      await queryInterface.sequelize.transaction(async t => {
+        await queryInterface.bulkInsert('Ratings', ratings, {
+          transaction: t
+        });
       });
-    });
+    } catch (err) {
+      console.error(err);
+    }
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.sequelize.transaction(async t => {
-      await queryInterface.bulkDelete('Ratings', null, {
-        transaction: t
+    try{
+      await queryInterface.sequelize.transaction(async t => {
+        await queryInterface.bulkDelete('Ratings', null, {
+          transaction: t
+        });
       });
-    });
+    } catch (err) {
+      console.error(err);
+    }
   }
 };

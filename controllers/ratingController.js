@@ -1,7 +1,7 @@
 import db from '../models/index.cjs';
 import { asyncHandler, checkUserStatus, checkResource } from '../utils/helperFunctions.js';
 
-const { Rating, Tip, TipReviewers, sequelize } = db;
+const { Rating, Tip, sequelize } = db;
 
 const ratings_get = asyncHandler(async (req, res, next) => {
   let title;

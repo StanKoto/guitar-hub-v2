@@ -1,3 +1,5 @@
+import { Op } from "sequelize";
+
 export const searchResults = (model, associatedModels) => async (req, res, next) => {
   let results,
       queryOptions = {};
@@ -6,14 +8,26 @@ export const searchResults = (model, associatedModels) => async (req, res, next)
   for (const param of excludedFields) {
     delete query[param];
   }
-  let queryString = JSON.stringify(query).replace(/\bgt|gte|lt|lte|in\b/g, match => `[Op.${match}]`);
-  const adjustedQuery = JSON.parse(queryString);
-  if (req.baseUrl.includes('tip-ratings')) adjustedQuery.tipId = req.params.id
-  if (req.path.includes('given-ratings')) adjustedQuery.reviewerId = req.params.id
-  if (req.path.includes('received-ratings')) adjustedQuery.recipientId = req.params.id
-  // if (req.query.textSearch) adjustedQuery['$text'] = { $search: req.query.textSearch.split(',').join(' ') }
-  // results = req.query.textSearch ? model.find(adjustedQuery, { score: { $meta: 'textScore' } }) : model.find(adjustedQuery)
-  if (Object.keys(adjustedQuery).length !== 0) queryOptions.where = adjustedQuery;
+  const searchOperators = [ 'gt', 'gte', 'lt', 'lte', 'in' ];
+  for (const param in query) {
+    let paramWithOperator = query[param];
+    if (typeof paramWithOperator === 'object') {
+      for (const key in paramWithOperator) {
+        if (searchOperators.includes(key)) {
+          const searchValue = key === 'in' ? paramWithOperator[key].split(',') : paramWithOperator[key]
+          Object.assign(paramWithOperator, { [Op[key]]: searchValue });
+          delete paramWithOperator[key];
+        }
+      }
+    }
+  }
+  console.log(query);
+  if (req.baseUrl.includes('tip-ratings')) query.tipId = req.params.id
+  if (req.path.includes('given-ratings')) query.reviewerId = req.params.id
+  if (req.path.includes('received-ratings')) query.recipientId = req.params.id
+  // if (req.query.textSearch) query['$text'] = { $search: req.query.textSearch.split(',').join(' ') }
+  // results = req.query.textSearch ? model.find(query, { score: { $meta: 'textScore' } }) : model.find(query)
+  if (Object.keys(query).length !== 0) queryOptions.where = query;
   if (req.query.select) queryOptions.attributes = req.query.select.split(',')
   if (associatedModels) queryOptions.include = associatedModels
   // if (req.query.textSearch) results = results.sort({ score: { $meta: 'textScore' } })
