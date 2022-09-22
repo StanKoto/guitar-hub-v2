@@ -1,6 +1,6 @@
 import { Sequelize, Op } from "sequelize";
 
-export const searchResults = (model, associatedModels) => async (req, res, next) => {
+export const searchResults = (model, associatedModels, attributesToExclude) => async (req, res, next) => {
   let results,
       queryOptions = {};
   const query = { ...req.query };
@@ -37,7 +37,9 @@ export const searchResults = (model, associatedModels) => async (req, res, next)
       ]
     })
   }
-  if (req.query.select) queryOptions.attributes = req.query.select.split(',')
+  const forbiddenFields = [ 'password', 'passwordSet', 'resetPasswordToken', 'resetPasswordExpire' ];
+  if (req.query.select) queryOptions.attributes = req.query.select.split(',').filter(attr => !forbiddenFields.includes(attr))
+  if (attributesToExclude && !req.query.select) queryOptions.attributes = { exclude: attributesToExclude }
   if (associatedModels) queryOptions.include = associatedModels
   if (req.query.sort) {
     queryOptions.order = [];

@@ -42,7 +42,7 @@
     <% if (tip.images) { %>
       <% for (const image of tip.images) { %>
         <div class="delete-image">
-          <img src="data:image/png;base64,<%= image.toString('base64') %>" alt="Tip image">
+          <img src="<%= image.url %>" alt="Tip image" crossorigin="anonymous">
           <span>
             <button class="delete image" id="<%= tip.images.indexOf(image) %>">Delete image</button>
           </span>

@@ -107,8 +107,3 @@ module.exports = (sequelize, DataTypes) => {
 
   return Rating;
 };
-
-/**
- todos:
- * error handling for associations
- */

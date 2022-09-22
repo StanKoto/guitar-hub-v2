@@ -34,5 +34,10 @@ module.exports = {
   },
   multer: {
     fileSize: Number(process.env.MULTER_FILE_SIZE)
+  },
+  imageKit: {
+    publicApiKey: process.env.IMAGEKIT_PUBLIC_API_KEY,
+    privateApiKey: process.env.IMAGEKIT_PRIVATE_API_KEY,
+    urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT
   }
 };

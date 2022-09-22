@@ -13,8 +13,8 @@ import {
   tip_delete,
   tipEditForm_get, 
   tip_put, 
-  // tipImages_post, 
-  // tipImages_delete
+  tipImages_post, 
+  tipImages_delete
 } from '../controllers/tipController.js';
 import { tipRatingRouter } from '../routes/tipRatingRoutes.js';
 
@@ -35,7 +35,9 @@ const upload = multer({
 const tipRouter = express.Router();
 
 tipRouter.get('/', tipsOverview_get);
-tipRouter.get('/tips', searchResults(Tip, [{ model: User, as: 'author', attributes: [ 'username' ] }]), tips_get);
+tipRouter.get('/tips', searchResults(Tip, [
+  { model: User, as: 'author', attributes: [ 'username' ] }
+], [ 'contents', 'images' ]), tips_get);
 tipRouter.get('/tips/:id/:slug', tip_get);
 tipRouter.use(checkAuthentication);
 tipRouter.get('/new-tip-form', newTipForm_get)
@@ -45,7 +47,7 @@ tipRouter.route('/tips/:id/:slug')
   .delete(tip_delete);
 tipRouter.use('/tips/:id/:slug/tip-ratings', tipRatingRouter);
 tipRouter.get('/tips/:id/:slug/tip-edit-form', tipEditForm_get);
-// tipRouter.post('/tips/:id/:slug/images', upload.array('images', 10), tipImages_post)
-// tipRouter.delete('/tips/:id/:slug/images/:index', tipImages_delete);
+tipRouter.post('/tips/:id/:slug/images', upload.array('images', 10), tipImages_post)
+tipRouter.delete('/tips/:id/:slug/images/:index', tipImages_delete);
 
 export { tipRouter };

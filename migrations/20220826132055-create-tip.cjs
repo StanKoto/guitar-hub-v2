@@ -32,6 +32,7 @@ module.exports = {
           averageRating: {
             type: Sequelize.DECIMAL(10, 1)
           },
+          images: Sequelize.ARRAY(Sequelize.JSONB),
           authorId: {
             type: Sequelize.UUID,
             references: {
@@ -50,6 +51,10 @@ module.exports = {
             type: Sequelize.DATE
           }
         }, {
+          transaction: t
+        });
+
+        await queryInterface.sequelize.query('ALTER TABLE "Tips" ADD CONSTRAINT "img_len" CHECK (array_length(images, 1) < 11)', {
           transaction: t
         });
       });

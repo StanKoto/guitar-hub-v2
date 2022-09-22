@@ -24,7 +24,13 @@ userRouter.use(checkAuthentication, checkRole);
 userRouter.get('/', userManagement_get);
 userRouter.get('/new-user-form' ,newUserForm_get)
 userRouter.route('/users')
-  .get(searchResults(User), users_get)
+  .get(searchResults(User, undefined, [ 
+    'email', 
+    'password', 
+    'passwordSet', 
+    'resetPasswordToken', 
+    'resetPasswordExpire'
+  ]), users_get)
   .post(users_post);
 userRouter.route('/users/:id/:slug')
   .get(user_get)

@@ -7,7 +7,7 @@
     <% if (tip.images) { %>
       <span>
         <% for (const image of tip.images) { %>
-          <img src="data:image/png;base64,<%= image.toString('base64') %>" alt="Tip image">
+          <img src="<%= image.url %>" alt="Tip image" crossorigin="anonymous">
         <% } %>
       </span>
       <br><br>

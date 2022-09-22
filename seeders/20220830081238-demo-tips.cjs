@@ -19,6 +19,9 @@ module.exports = {
         await queryInterface.bulkInsert('Tips', tips, {
           transaction: t
         });
+        await queryInterface.sequelize.query(`UPDATE "Tips" SET "images" = ARRAY['{"id":"nldknclkdc","url":"https://imagekit/image.jpg"}','{"id":"kjdnckjncc","url":"https://imagekit/image2.jpg"}','{"id":"nldknclkdc","url":"https://imagekit/image.jpg"}','{"id":"kjdnckjncc","url":"https://imagekit/image2.jpg"}','{"id":"nldknclkdc","url":"https://imagekit/image.jpg"}','{"id":"kjdnckjncc","url":"https://imagekit/image2.jpg"}','{"id":"nldknclkdc","url":"https://imagekit/image.jpg"}','{"id":"kjdnckjncc","url":"https://imagekit/image2.jpg"}','{"id":"nldknclkdc","url":"https://imagekit/image.jpg"}','{"id":"kjdnckjncc","url":"https://imagekit/image2.jpg"}']::json[] WHERE "id"='7bbafbd9-c49d-49c7-9e2f-3a7bb9547158'`, {
+          transaction: t
+        });
       });
     } catch (err) {
       console.error(err);

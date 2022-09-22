@@ -1,5 +1,5 @@
 'use strict';
-const { Model } = require('sequelize');
+const { Model, QueryTypes } = require('sequelize');
 const SequelizeSlugify = require('sequelize-slugify');
 
 module.exports = (sequelize, DataTypes) => {
@@ -101,7 +101,20 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    averageRating: DataTypes.DECIMAL(10, 1)
+    averageRating: DataTypes.DECIMAL(10, 1),
+    images: {
+      type: DataTypes.ARRAY(DataTypes.JSONB),
+      validate: {
+        async hasValidLength (value) {
+          const result = await sequelize.query(`SELECT COALESCE((SELECT CARDINALITY(images) FROM "Tips" WHERE "id"='${this.id}'), 0) AS length`, {
+            type: QueryTypes.SELECT,
+            plain: true,
+            raw: true
+          });
+          if ((result.length + this.images.length) > 10) throw new Error('The number of images provided for the tip would exceeed the limit of 10, please select less images or delete some of the already attached ones');
+        }
+      }
+    }
   }, {
     sequelize,
     modelName: 'Tip',
@@ -132,9 +145,3 @@ module.exports = (sequelize, DataTypes) => {
 
   return Tip;
 };
-
-/**
- todos:
- * image storing and validation
- * full text search
- */

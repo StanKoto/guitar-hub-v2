@@ -22,7 +22,7 @@ form.addEventListener('submit', async (e) => {
   const formData = new FormData();
   formData.append('title', title);
   formData.append('contents', contents);
-  formData.append('category', category);
+  if (category.length !== 0) formData.append('category', category);
   for (const image of images.files) {
     formData.append('images', image);
   }

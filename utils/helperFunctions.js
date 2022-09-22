@@ -2,9 +2,16 @@ import sign from 'jsonwebtoken/sign.js';
 import sharp from 'sharp';
 import config from '../envVariables.cjs';
 import db from '../models/index.cjs';
+import ImageKit from 'imagekit';
 import { ErrorResponse } from '../utils/errorHandling.js';
 
-const { User } = db;
+const { User, sequelize } = db;
+
+const imagekit = new ImageKit({
+  publicKey: config.imageKit.publicApiKey,
+  privateKey: config.imageKit.privateApiKey,
+  urlEndpoint: config.imageKit.urlEndpoint
+});
 
 const asyncHandler = fn => (req, res, next) =>
 Promise
@@ -54,14 +61,35 @@ const checkResource = async (req, model, attributesToExclude, associatedModel) =
   return resource;
 };
 
-const processImages = async (req, images) => {
-  const bufferArray = await Promise.all(req.files.map(file => sharp(file.buffer).resize(480, 270).png().toBuffer()));
-  for (const buffer of bufferArray) {
-    for(const image of images) {
-      if (Buffer.compare(buffer, image) === 0) throw new Error ('Duplicate image')
+const processImages = async (req, tip) => {
+  if ((tip.images && tip.images.length === 10) || req.files.length > 10) throw new Error('Image limit reached')
+  const firstImages = [];
+  const files = await Promise.all(req.files.map(async file => {
+    file.buffer = await sharp(file.buffer).resize(480, 270).png().toBuffer();
+    return file;
+  }));
+  for (const file of files) {
+    const response = await imagekit.upload({
+      file: file.buffer.toString('base64'),
+      fileName: file.originalname.split('.')[0].concat('.png'),
+      folder: '/guitar-hub/images'
+    });
+    const imageData = { id: response.fileId, url: response.url };
+    if (!tip.images) {
+      firstImages.push(imageData);
+    } else {
+      await tip.update({ images: sequelize.fn('array_append', sequelize.col('images'), JSON.stringify(imageData)) });
     }
-    images.push(buffer);
   }
+  if (!tip.images) tip.images = firstImages
+};
+
+const deleteOneImage = async (images, index) => {
+  await imagekit.deleteFile(images[index].id);
+};
+
+const deleteAllImages = async (images) => {
+  await imagekit.bulkDeleteFiles(images);
 };
 
 export { 
@@ -71,5 +99,7 @@ export {
   checkAuthorship, 
   checkUserStatus,
   checkResource,
-  processImages
+  processImages,
+  deleteOneImage,
+  deleteAllImages
 };

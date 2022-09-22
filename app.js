@@ -37,7 +37,13 @@ app.use(cookieParser());
 app.use(passport.initialize());
 
 app.use(sqlSanitizer);
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      "img-src": [ "'self'", "data:", "https://ik.imagekit.io" ]
+    }
+  }
+}));
 app.use(xss());
 
 const limiter = rateLimit({

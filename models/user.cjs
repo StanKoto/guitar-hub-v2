@@ -102,7 +102,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         passwordIsProvided(value) {
           if (value.length === 0 && this.passwordSet === true) {
-            throw new Error('Please provide a passport')
+            throw new Error('Please provide a password')
           }
         }
       }
@@ -155,11 +155,3 @@ module.exports = (sequelize, DataTypes) => {
 
   return User;
 };
-
-/** 
-todos: 
-* lowercase the email address +/-
-* exclude password from search results
-* full text search
-* check on update & on delete settings for associated models +
-*/
