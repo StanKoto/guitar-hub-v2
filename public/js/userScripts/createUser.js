@@ -5,8 +5,9 @@ const form = document.querySelector('form');
 const usernameError = { element: document.querySelector('.username.error'), errorType: 'username' };
 const emailError = { element: document.querySelector('.email.error'), errorType: 'email' };
 const passwordError = { element: document.querySelector('.password.error'), errorType: 'password' };
+const roleError = { element: document.querySelector('.role.error'), errorType: 'role' };
 
-const customErrors = [ usernameError, emailError, passwordError ];
+const customErrors = [ usernameError, emailError, passwordError, roleError ];
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();

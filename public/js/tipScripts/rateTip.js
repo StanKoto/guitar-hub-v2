@@ -10,12 +10,14 @@ if (ratingForm) {
 
     emptyErrors([ ratingError ]);
 
+    let body = {};
     const rating = ratingForm.rating.value;
+    if (rating.length !== 0) body.rating = rating
 
     const url = `${location.pathname}/tip-ratings`;
     const method = 'POST';
     const redirectUrl = location.pathname;
-    const body = JSON.stringify({ rating });
+    body = JSON.stringify(body);
 
     await makeRequest(url, method, redirectUrl, body, [ ratingError ]);
   })

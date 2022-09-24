@@ -10,7 +10,8 @@ const handleErrors = (err, req, res, next) => {
     username: '', 
     email: '', 
     password: '', 
-    credentials: '', 
+    credentials: '',
+    role: '',
     token: '', 
     title: '', 
     contents: '',
@@ -31,7 +32,12 @@ const handleErrors = (err, req, res, next) => {
   
   if (err.parent && err.parent.code === '22P02') {
     if (err.parent.message.includes('enum')) {
-      errors.category = 'Provided value is not a valid category name';
+      const field = err.parent.message.split('"')[1].split('_')[2];
+      if (field === 'status') {
+        console.error(err);
+        return res.status(500).json({ otherErrors: true });
+      }
+      errors[field] = `Provided value is not a valid ${field} name`;
       return res.status(400).json({ errors });
     } else {
       err = new ErrorResponse(`Resource not found with ID of ${err.message.split(': ')[1]}`, 404);

@@ -5,10 +5,11 @@ const passwordForm = document.getElementById('password-form');
 
 const usernameError = { element: document.querySelector('.username.error'), errorType: 'username' };
 const emailError = { element: document.querySelector('.email.error'), errorType: 'email' };
+const roleError = { element: document.querySelector('.role.error'), errorType: 'role' };
 const matchPasswordError = { element: document.querySelector('.match.password.error'), errorType: 'credentials' };
 const validatePasswordError = { element: document.querySelector('.validate.password.error'), errorType: 'password' };
 
-const customDetailsErrors = [ usernameError, emailError ];
+const customDetailsErrors = [ usernameError, emailError, roleError ];
 const customPasswordErrors = [ matchPasswordError, validatePasswordError ];
 
 const urlTemplate = location.pathname.split('/');

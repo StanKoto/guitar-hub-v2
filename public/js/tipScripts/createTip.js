@@ -20,8 +20,8 @@ form.addEventListener('submit', async (e) => {
   const images = document.getElementById('images');
 
   const formData = new FormData();
-  formData.append('title', title);
-  formData.append('contents', contents);
+  if (title.length !== 0) formData.append('title', title);
+  if (contents.length !== 0) formData.append('contents', contents);
   if (category.length !== 0) formData.append('category', category);
   for (const image of images.files) {
     formData.append('images', image);
