@@ -92,9 +92,10 @@ const tipImages_post = asyncHandler(async (req, res, next) => {
 const tipImages_delete = asyncHandler(async (req, res, next) => {
   const index = req.params.index;
   const tip = await checkResource(req, Tip);
-  if (!tip.images) throw new ErrorResponse(`No images found for tip with id of ${id}`, 404)
+  if (!tip.images) throw new ErrorResponse(`No images found for tip with id of ${tip.id}`, 404)
   await deleteOneImage(tip.images, index);
-  await tip.update({ images: sequelize.fn('array_remove', sequelize.col('images'), JSON.stringify(tip.images[index])) });
+  tip.images.splice(index, 1);
+  tip.changed('images', true);
   await tip.save();
   res.status(200).json({ success: true });
 });

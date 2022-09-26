@@ -32,7 +32,7 @@ module.exports = {
           averageRating: {
             type: Sequelize.DECIMAL(10, 1)
           },
-          images: Sequelize.ARRAY(Sequelize.JSONB),
+          images: Sequelize.JSONB,
           authorId: {
             type: Sequelize.UUID,
             references: {
@@ -54,7 +54,7 @@ module.exports = {
           transaction: t
         });
 
-        await queryInterface.sequelize.query('ALTER TABLE "Tips" ADD CONSTRAINT "img_len" CHECK (array_length(images, 1) < 11)', {
+        await queryInterface.sequelize.query('ALTER TABLE "Tips" ADD CONSTRAINT "img_len" CHECK (jsonb_array_length(images) < 11)', {
           transaction: t
         });
       });

@@ -5,7 +5,7 @@ import db from '../models/index.cjs';
 import ImageKit from 'imagekit';
 import { ErrorResponse } from '../utils/errorHandling.js';
 
-const { User, sequelize } = db;
+const { User } = db;
 
 const imagekit = new ImageKit({
   publicKey: config.imageKit.publicApiKey,
@@ -62,8 +62,8 @@ const checkResource = async (req, model, attributesToExclude, associatedModel) =
 };
 
 const processImages = async (req, tip) => {
-  if ((tip.images && tip.images.length === 10) || req.files.length > 10) throw new Error('Image limit reached')
-  const firstImages = [];
+  if ((tip.images && (tip.images.length + req.files.length > 10)) || req.files.length > 10) throw new Error('Image limit reached')
+  if (!tip.images) tip.images = []
   const files = await Promise.all(req.files.map(async file => {
     file.buffer = await sharp(file.buffer).resize(480, 270).png().toBuffer();
     return file;
@@ -75,13 +75,9 @@ const processImages = async (req, tip) => {
       folder: '/guitar-hub/images'
     });
     const imageData = { id: response.fileId, url: response.url };
-    if (!tip.images) {
-      firstImages.push(imageData);
-    } else {
-      await tip.update({ images: sequelize.fn('array_append', sequelize.col('images'), JSON.stringify(imageData)) });
-    }
+    tip.images.push(imageData);
   }
-  if (!tip.images) tip.images = firstImages
+  tip.changed('images', true);
 };
 
 const deleteOneImage = async (images, index) => {

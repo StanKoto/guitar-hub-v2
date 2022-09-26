@@ -1,16 +1,10 @@
 'use strict';
-const { Model, QueryTypes } = require('sequelize');
+const { Model } = require('sequelize');
 const SequelizeSlugify = require('sequelize-slugify');
 
 module.exports = (sequelize, DataTypes) => {
   class Tip extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
       this.belongsTo(models.User, {
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
@@ -103,15 +97,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     averageRating: DataTypes.DECIMAL(10, 1),
     images: {
-      type: DataTypes.ARRAY(DataTypes.JSONB),
+      type: DataTypes.JSONB,
       validate: {
-        async hasValidLength (value) {
-          const result = await sequelize.query(`SELECT COALESCE((SELECT CARDINALITY(images) FROM "Tips" WHERE "id"='${this.id}'), 0) AS length`, {
-            type: QueryTypes.SELECT,
-            plain: true,
-            raw: true
-          });
-          if ((result.length + this.images.length) > 10) throw new Error('The number of images provided for the tip would exceeed the limit of 10, please select less images or delete some of the already attached ones');
+        hasValidLength(value) {
+          if (value.length > 10) throw new Error('The number of images provided for the tip would exceeed the limit of 10, please select less images or delete some of the already attached ones')
         }
       }
     }
