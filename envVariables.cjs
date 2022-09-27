@@ -1,7 +1,6 @@
 const path = require('path');
 const dotenv = require('dotenv');
 
-// dotenv.config({ path: new URL('config.env', import.meta.url) });
 dotenv.config({ path: path.join(__dirname, 'config.env') })
 
 module.exports = {
@@ -10,8 +9,8 @@ module.exports = {
     port: Number(process.env.PORT)
   },
   db: {
-    mongoUri: process.env.MONGO_URI,
-    pgUri: process.env.PG_URI
+    devUri: process.env.PG_URI,
+    prodUri: process.env.DATABASE_URL
   },
   googleStrategy: {
     clientId: process.env.CLIENT_ID,

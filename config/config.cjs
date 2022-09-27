@@ -2,9 +2,9 @@ const config = require ('../envVariables.cjs');
 
 module.exports = {
   development: {
-    url: config.db.pgUri
+    url: config.db.devUri
   },
   production: {
-    url: config.db.pgUri
+    url: config.db.prodUri
   }
 };

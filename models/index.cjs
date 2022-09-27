@@ -11,6 +11,15 @@ const db = {};
 let sequelize;
 if (dbConfig.use_env_variable) {
   sequelize = new Sequelize(process.env[dbConfig.use_env_variable], dbConfig);
+} else if (env === 'production') {
+  sequelize = new Sequelize(dbConfig.url, {
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    }
+  });
 } else {
   sequelize = new Sequelize(dbConfig.url);
 }
