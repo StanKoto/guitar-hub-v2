@@ -5,6 +5,11 @@ module.exports = {
     url: config.db.devUri
   },
   production: {
-    url: config.db.prodUri
+    url: config.db.prodUri,
+    dialectOptions: {
+      ssl: {
+        rejectUnauthorized: false
+      }
+    }
   }
 };
