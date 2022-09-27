@@ -35,7 +35,11 @@
                 <td>Deleted user</td>
               <% } %>
             <% } else { %>
-              <td><%= rating.recipient.username %></td>
+              <% if (rating.recipient) { %>
+                <td><%= rating.recipient.username %></td>
+              <% } else { %>
+                <td>Deleted user</td>
+              <% } %>
             <% } %>
             <td class="center"><%= rating.rating %></td>
           </tr>

@@ -1,6 +1,16 @@
-import { Tip } from '../models/Tip.js';
-import { asyncHandler, checkAuthorship, checkUserStatus, checkResource, processImages } from '../utils/helperFunctions.js';
+import db from '../models/index.cjs';
+import { 
+  asyncHandler, 
+  checkAuthorship, 
+  checkUserStatus, 
+  checkResource, 
+  processImages, 
+  deleteOneImage,
+  deleteAllImages
+} from '../utils/helperFunctions.js';
 import { ErrorResponse } from '../utils/errorHandling.js';
+
+const { Tip, User, sequelize } = db;
 
 const tipsOverview_get = asyncHandler((req, res, next) => {
   res.render('tipViews/tipsOverview', { title: 'Tips Overview' });
@@ -11,12 +21,12 @@ const tips_get = asyncHandler(async (req, res, next) => {
 });
 
 const tip_get = asyncHandler(async (req, res, next) => {
-  const tip = await checkResource(req, Tip, '+images', { path: 'author', select: 'username slug' });
+  const tip = await checkResource(req, Tip, undefined, { model: User, as: 'author', attributes: [ 'username', 'slug' ] } );
   let notRated = true;
-  if (req.user && (!tip.author || !tip.author._id.equals(req.user._id))) {
-    await tip.populate({ path: 'ratings', select: 'reviewer' });
-    for (const rating of tip.ratings) {
-      if (rating.reviewer && rating.reviewer.equals(req.user._id)) {
+  if (req.user && (!tip.authorId || tip.authorId !== req.user.id)) {
+    const tipRatings = await tip.getRatings();
+    for (const rating of tipRatings) {
+      if (rating.reviewerId && rating.reviewerId === req.user.id) {
         notRated = false;
         break;
       }
@@ -30,52 +40,62 @@ const newTipForm_get = asyncHandler((req, res, next) => {
 });
 
 const tips_post = asyncHandler(async (req, res, next) => {
-  const images = [];
-  await processImages(req, images);
-  const tip = await Tip.create({ 
-    title: req.body.title, 
-    contents: req.body.contents, 
-    category: req.body.category, 
-    author: req.user._id, 
-    images
+  let tip;
+  await sequelize.transaction(async t => {
+    tip = await Tip.create({ 
+      title: req.body.title, 
+      contents: req.body.contents, 
+      category: req.body.category, 
+      authorId: req.user.id
+    }, {
+      transaction: t
+    });
+    if (req.files) await processImages(req, tip)
+    await tip.save({ transaction: t });
+    await checkUserStatus(req, t);
   });
-  await checkUserStatus(req);
   res.status(201).json({ tip });
 });
 
 const tip_delete = asyncHandler(async (req, res, next) => {
   const tip = await checkResource(req, Tip);
   checkAuthorship(req, tip);
-  await tip.remove();
+  if (tip.images && tip.images.length !== 0) await deleteAllImages(tip.images.map(image => image.id));
+  await tip.destroy();
   res.status(200).json({ success: true });
 });
 
 const tipEditForm_get = asyncHandler(async (req, res, next) => {
-  const tip = await checkResource(req, Tip, '+images');
+  const tip = await checkResource(req, Tip);
   res.render('tipViews/updateTip', { title: 'Update tip', tip });
 });
 
 const tip_put = asyncHandler(async (req, res, next) => {
   let tip = await checkResource(req, Tip);
   checkAuthorship(req, tip);
-  tip.title = req.body.title;
-  tip.contents = req.body.contents;
+  tip.set({
+    title: req.body.title,
+    contents: req.body.contents
+  });
   if (req.body.category) tip.category = req.body.category
   await tip.save();
   res.status(200).json({ tip });
 });
 
 const tipImages_post = asyncHandler(async (req, res, next) => {
-  const tip = await checkResource(req, Tip, '+images');
-  await processImages(req, tip.images);
+  const tip = await checkResource(req, Tip);
+  if (req.files) await processImages(req, tip);
   await tip.save();
   res.status(200).json({ success: true });
 });
 
 const tipImages_delete = asyncHandler(async (req, res, next) => {
-  const tip = await checkResource(req, Tip, '+images');
-  if (!tip.images) throw new ErrorResponse(`No images found for tip with id of ${id}`, 404)
-  tip.images.splice(req.params.index, 1);
+  const index = req.params.index;
+  const tip = await checkResource(req, Tip);
+  if (!tip.images) throw new ErrorResponse(`No images found for tip with id of ${tip.id}`, 404)
+  await deleteOneImage(tip.images, index);
+  tip.images.splice(index, 1);
+  tip.changed('images', true);
   await tip.save();
   res.status(200).json({ success: true });
 });

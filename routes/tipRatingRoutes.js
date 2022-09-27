@@ -1,23 +1,27 @@
 import express from 'express';
 import { searchResults } from '../middleware/searchResults.js';
-import { Rating } from '../models/Rating.js';
+import db from '../models/index.cjs';
 import { ratings_get, ratings_post } from '../controllers/ratingController.js';
+
+const { Rating, Tip, User } = db;
 
 const tipRatingRouter = express.Router({ mergeParams: true });
 
 tipRatingRouter.route('/')
   .get(searchResults(Rating, [
   { 
-    path: 'tip', 
-    select: 'title' 
+    model: Tip, 
+    attributes: [ 'title' ] 
   }, 
   { 
-    path: 'reviewer', 
-    select: 'username'
+    model: User,
+    as: 'reviewer', 
+    attributes: [ 'username' ]
    },
   { 
-    path: 'recipient', 
-    select: 'username'
+    model: User,
+    as: 'recipient',
+    attributes: [ 'username' ]
   }
 ]), ratings_get)
   .post(ratings_post);

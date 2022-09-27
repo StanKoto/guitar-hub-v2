@@ -1,9 +1,9 @@
 import express from 'express';
 import multer from 'multer';
-import config from '../envVariables.js';
+import config from '../envVariables.cjs';
 import { checkAuthentication } from '../middleware/auth.js';
 import { searchResults } from '../middleware/searchResults.js';
-import { Tip } from '../models/Tip.js';
+import db from '../models/index.cjs';
 import {
   tipsOverview_get, 
   tips_get, 
@@ -17,6 +17,8 @@ import {
   tipImages_delete
 } from '../controllers/tipController.js';
 import { tipRatingRouter } from '../routes/tipRatingRoutes.js';
+
+const { Tip, User } = db;
 
 const upload = multer({
   limits: {
@@ -33,7 +35,9 @@ const upload = multer({
 const tipRouter = express.Router();
 
 tipRouter.get('/', tipsOverview_get);
-tipRouter.get('/tips', searchResults(Tip, [{ path: 'author', select: 'username' }]), tips_get);
+tipRouter.get('/tips', searchResults(Tip, [
+  { model: User, as: 'author', attributes: [ 'username' ] }
+], [ 'contents', 'images' ]), tips_get);
 tipRouter.get('/tips/:id/:slug', tip_get);
 tipRouter.use(checkAuthentication);
 tipRouter.get('/new-tip-form', newTipForm_get)

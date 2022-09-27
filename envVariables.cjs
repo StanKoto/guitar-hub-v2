@@ -1,14 +1,17 @@
-import * as dotenv from 'dotenv';
+const path = require('path');
+const dotenv = require('dotenv');
 
-dotenv.config({ path: new URL('config.env', import.meta.url) });
+// dotenv.config({ path: new URL('config.env', import.meta.url) });
+dotenv.config({ path: path.join(__dirname, 'config.env') })
 
-export default {
+module.exports = {
   main: {
     env: process.env.NODE_ENV,
     port: Number(process.env.PORT)
   },
   db: {
-    mongoUri: process.env.MONGO_URI
+    mongoUri: process.env.MONGO_URI,
+    pgUri: process.env.PG_URI
   },
   googleStrategy: {
     clientId: process.env.CLIENT_ID,
@@ -31,5 +34,10 @@ export default {
   },
   multer: {
     fileSize: Number(process.env.MULTER_FILE_SIZE)
+  },
+  imageKit: {
+    publicApiKey: process.env.IMAGEKIT_PUBLIC_API_KEY,
+    privateApiKey: process.env.IMAGEKIT_PRIVATE_API_KEY,
+    urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT
   }
 };

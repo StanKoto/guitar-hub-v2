@@ -39,16 +39,18 @@
       <div class="image error"></div>
     </form>
     <br>
-    <% for (const image of tip.images) { %>
-      <div class="delete-image">
-        <img src="data:image/png;base64,<%= image.toString('base64') %>" alt="Tip image">
-        <span>
-          <button class="delete image" id="<%= tip.images.indexOf(image) %>">Delete image</button>
-        </span>
-      </div>
+    <% if (tip.images) { %>
+      <% for (const image of tip.images) { %>
+        <div class="delete-image">
+          <img src="<%= image.url %>" alt="Tip image" crossorigin="anonymous">
+          <span>
+            <button class="delete image" id="<%= tip.images.indexOf(image) %>">Delete image</button>
+          </span>
+        </div>
+      <% } %>
+      <br>
     <% } %>
-    <br>
-    <span><a class="btn" href="/tips-overview/tips/<%= tip._id %>/<%= tip.slug %>">Go back to the tip page</a></span>
+    <span><a class="btn" href="/tips-overview/tips/<%= tip.id %>/<%= tip.slug %>">Go back to the tip page</a></span>
   </main>
 
   <script type="module" src="/js/tipScripts/updateTip.js"></script>

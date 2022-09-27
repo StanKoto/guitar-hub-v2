@@ -1,7 +1,7 @@
 import express from 'express';
 import { checkAuthentication, checkRole } from '../middleware/auth.js';
 import { searchResults } from '../middleware/searchResults.js';
-import { User } from '../models/User.js';
+import db from '../models/index.cjs';
 import {
   userManagement_get, 
   newUserForm_get, 
@@ -15,6 +15,8 @@ import {
 } from '../controllers/userController.js';
 import { userRatingRouter } from '../routes/userRatingRoutes.js';
 
+const { User } = db;
+
 const userRouter = express.Router();
 
 userRouter.use(checkAuthentication, checkRole);
@@ -22,7 +24,13 @@ userRouter.use(checkAuthentication, checkRole);
 userRouter.get('/', userManagement_get);
 userRouter.get('/new-user-form' ,newUserForm_get)
 userRouter.route('/users')
-  .get(searchResults(User), users_get)
+  .get(searchResults(User, undefined, [ 
+    'email', 
+    'password', 
+    'passwordSet', 
+    'resetPasswordToken', 
+    'resetPasswordExpire'
+  ]), users_get)
   .post(users_post);
 userRouter.route('/users/:id/:slug')
   .get(user_get)

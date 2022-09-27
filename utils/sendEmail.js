@@ -1,5 +1,5 @@
 import sgMail from '@sendgrid/mail';
-import config from '../envVariables.js';
+import config from '../envVariables.cjs';
 
 export const sendEmail = async (userEmail, subject, text) => {
   sgMail.setApiKey(config.sendgrid.apiKey);
