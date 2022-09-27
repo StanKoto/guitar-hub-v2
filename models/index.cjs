@@ -15,7 +15,6 @@ if (dbConfig.use_env_variable) {
   sequelize = new Sequelize(dbConfig.url, {
     dialectOptions: {
       ssl: {
-        require: true,
         rejectUnauthorized: false
       }
     }
