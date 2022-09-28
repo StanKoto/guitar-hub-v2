@@ -41,7 +41,7 @@ passport.use('local-login', new LocalStrategy({
 }));
 
 passport.use(new GoogleStrategy({
-  callbackURL: '/auth/google/redirect',
+  callbackURL: 'https://the-guitar-hub.herokuapp.com/auth/google/redirect',
   clientID: config.googleStrategy.clientId,
   clientSecret: config.googleStrategy.secret
 }, async (accessToken, refreshToken, profile, done) => {
