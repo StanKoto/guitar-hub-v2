@@ -98,9 +98,10 @@ module.exports = (sequelize, DataTypes) => {
     averageRating: DataTypes.DECIMAL(10, 1),
     images: {
       type: DataTypes.JSONB,
+      allowNull: true,
       validate: {
         hasValidLength(value) {
-          if (value.length > 10) throw new Error('The number of images provided for the tip would exceeed the limit of 10, please select less images or delete some of the already attached ones')
+          if (value && value.length > 10) throw new Error('The number of images provided for the tip would exceeed the limit of 10, please select less images or delete some of the already attached ones')
         }
       }
     }

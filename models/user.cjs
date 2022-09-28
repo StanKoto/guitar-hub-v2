@@ -95,7 +95,7 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Minimum password length is 6 characters'
         },
         passwordIsProvided(value) {
-          if (value.length === 0 && this.passwordSet === true) {
+          if (value && value.length === 0 && this.passwordSet === true) {
             throw new Error('Please provide a password')
           }
         }
