@@ -1,0 +1,53 @@
+[
+  {
+    "id": "edcd99d5-d12c-4611-8452-a389b43a385f",
+    "username": "Stanislav Kotovych",
+    "email": "stankotovych@gmail.com",
+    "password": "super_password_123",
+    "status": "active",
+    "role": "admin",
+    "tipCount": 2
+  },
+  {
+    "id": "e252979a-93fc-48c5-a7f1-225499ae2b92",
+    "username": "Yehor Petruk",
+    "email": "yehorpetruk@gmail.com",
+    "password": "super_password_456",
+    "status": "active",
+    "role": "admin",
+    "tipCount": 2
+  },
+  {
+    "id": "fcdf2d3e-2fbc-4b95-9f92-c8203a8e7bef",
+    "username": "Matt Blanc",
+    "email": "mattblanc@gmail.com",
+    "password": "super_password_789",
+    "status": "active",
+    "role": "user",
+    "tipCount": 2
+  },
+  {
+    "id": "9cfd6486-8ca4-425f-9be8-347c19e3757f",
+    "username": "Jess Smith",
+    "email": "jesssmith@gmail.com",
+    "password": "super_password_1",
+    "status": "passive",
+    "role": "user"
+  },
+  {
+    "id": "aa58dbea-94e7-4b55-9696-e462f7819088",
+    "username": "Brad Clark",
+    "email": "bradclark@gmail.com",
+    "password": "super_password_2",
+    "status": "passive",
+    "role": "user"
+  },
+  {
+    "id": "a609f39f-ad70-4390-a5d7-7c3dcb39ca7a",
+    "username": "Jack Nickolson",
+    "email": "jacknickolson@gmail.com",
+    "password": "super_password_3",
+    "status": "passive",
+    "role": "user"
+  }
+]

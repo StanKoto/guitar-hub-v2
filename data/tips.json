@@ -1,0 +1,50 @@
+[
+  {
+    "id": "7bbafbd9-c49d-49c7-9e2f-3a7bb9547158",
+    "title": "A very cool post",
+    "contents": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    "category": "Guitar, strings and accessories choice",
+    "averageRating": 4.5,
+    "authorId": "edcd99d5-d12c-4611-8452-a389b43a385f",
+    "images": [{"id":"nldknclkdc","url":"https://imagekit/image.jpg"},{"id":"kjdnckjncc","url":"https://imagekit/image2.jpg"},{"id":"nldknclkdc","url":"https://imagekit/image.jpg"},{"id":"kjdnckjncc","url":"https://imagekit/image2.jpg"},{"id":"nldknclkdc","url":"https://imagekit/image.jpg"},{"id":"kjdnckjncc","url":"https://imagekit/image2.jpg"},{"id":"nldknclkdc","url":"https://imagekit/image.jpg"},{"id":"kjdnckjncc","url":"https://imagekit/image2.jpg"},{"id":"nldknclkdc","url":"https://imagekit/image.jpg"},{"id":"kjdnckjncc","url":"https://imagekit/image2.jpg"}]
+  },
+  {
+    "id": "933d2164-326b-47de-9d9f-72b1f1817ce5",
+    "title": "Another cool post",
+    "contents": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    "category": "Guitar, strings and accessories choice",
+    "authorId": "edcd99d5-d12c-4611-8452-a389b43a385f"
+  },
+  {
+    "id": "26ec3f95-5c27-4cb9-bacf-9d581693efe1",
+    "title": "A pretty awesome post",
+    "contents": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    "category": "Care and maintenance",
+    "averageRating": 4.5,
+    "authorId": "e252979a-93fc-48c5-a7f1-225499ae2b92",
+    "images": [{"id":"nldknclkdc","url":"https://imagekit/image.jpg"},{"id":"kjdnckjncc","url":"https://imagekit/image2.jpg"},{"id":"nldknclkdc","url":"https://imagekit/image.jpg"},{"id":"kjdnckjncc","url":"https://imagekit/image2.jpg"},{"id":"nldknclkdc","url":"https://imagekit/image.jpg"},{"id":"kjdnckjncc","url":"https://imagekit/image2.jpg"},{"id":"nldknclkdc","url":"https://imagekit/image.jpg"},{"id":"kjdnckjncc","url":"https://imagekit/image2.jpg"},{"id":"nldknclkdc","url":"https://imagekit/image.jpg"},{"id":"kjdnckjncc","url":"https://imagekit/image2.jpg"}]
+  },
+  {
+    "id": "db054724-3c25-4897-a77f-15d8b31737d0",
+    "title": "A rather mediocre post",
+    "contents": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    "category": "Care and maintenance",
+    "authorId": "e252979a-93fc-48c5-a7f1-225499ae2b92"
+  },
+  {
+    "id": "c9771696-5639-4c2e-8a64-cda86201bea8",
+    "title": "A solid post",
+    "contents": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    "category": "Recording and amplification",
+    "averageRating": 5,
+    "authorId": "fcdf2d3e-2fbc-4b95-9f92-c8203a8e7bef",
+    "images": [{"id":"nldknclkdc","url":"https://imagekit/image.jpg"},{"id":"kjdnckjncc","url":"https://imagekit/image2.jpg"},{"id":"nldknclkdc","url":"https://imagekit/image.jpg"},{"id":"kjdnckjncc","url":"https://imagekit/image2.jpg"},{"id":"nldknclkdc","url":"https://imagekit/image.jpg"},{"id":"kjdnckjncc","url":"https://imagekit/image2.jpg"},{"id":"nldknclkdc","url":"https://imagekit/image.jpg"},{"id":"kjdnckjncc","url":"https://imagekit/image2.jpg"},{"id":"nldknclkdc","url":"https://imagekit/image.jpg"},{"id":"kjdnckjncc","url":"https://imagekit/image2.jpg"}]
+  },
+  {
+    "id": "4c84b077-49aa-42f0-bb95-ffc2a5167037",
+    "title": "A fantastic post",
+    "contents": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    "category": "Recording and amplification",
+    "authorId": "fcdf2d3e-2fbc-4b95-9f92-c8203a8e7bef"
+  }
+]

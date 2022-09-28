@@ -1,0 +1,44 @@
+[
+  {
+    "id": "443087aa-4e41-4905-a374-9b2d9c8d0cc5",
+    "rating": 4,
+    "tipId": "7bbafbd9-c49d-49c7-9e2f-3a7bb9547158",
+    "reviewerId": "e252979a-93fc-48c5-a7f1-225499ae2b92",
+    "recipientId": "edcd99d5-d12c-4611-8452-a389b43a385f"
+  },
+  {
+    "id": "00313ab7-ed39-4ea6-8432-5e5f340f1488",
+    "rating": 5,
+    "tipId": "7bbafbd9-c49d-49c7-9e2f-3a7bb9547158",
+    "reviewerId": "fcdf2d3e-2fbc-4b95-9f92-c8203a8e7bef",
+    "recipientId": "edcd99d5-d12c-4611-8452-a389b43a385f"
+  },
+  {
+    "id": "ebf4094a-f6c0-4246-b51d-8a061d08ae51",
+    "rating": 5,
+    "tipId": "26ec3f95-5c27-4cb9-bacf-9d581693efe1",
+    "reviewerId": "edcd99d5-d12c-4611-8452-a389b43a385f",
+    "recipientId": "e252979a-93fc-48c5-a7f1-225499ae2b92"
+  },
+  {
+    "id": "2d0466a7-6488-4b7d-a1e1-0e8b9bf2a426",
+    "rating": 4,
+    "tipId": "26ec3f95-5c27-4cb9-bacf-9d581693efe1",
+    "reviewerId": "fcdf2d3e-2fbc-4b95-9f92-c8203a8e7bef",
+    "recipientId": "e252979a-93fc-48c5-a7f1-225499ae2b92"
+  },
+  {
+    "id": "c0eb949e-a09d-42fb-be24-a55f3f5dbd36",
+    "rating": 5,
+    "tipId": "c9771696-5639-4c2e-8a64-cda86201bea8",
+    "reviewerId": "edcd99d5-d12c-4611-8452-a389b43a385f",
+    "recipientId": "fcdf2d3e-2fbc-4b95-9f92-c8203a8e7bef"
+  },
+  {
+    "id": "f0fb5736-7d5e-41a6-8856-e498fc19241f",
+    "rating": 5,
+    "tipId": "c9771696-5639-4c2e-8a64-cda86201bea8",
+    "reviewerId": "e252979a-93fc-48c5-a7f1-225499ae2b92",
+    "recipientId": "fcdf2d3e-2fbc-4b95-9f92-c8203a8e7bef"
+  }
+]
