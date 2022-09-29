@@ -4,7 +4,7 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as JwtStrategy } from 'passport-jwt';
 import config from '../envVariables.cjs';
 import db from '../models/index.cjs';
-import { checkPassword } from '../utils/helperFunctions.js';
+import { createUsername, checkPassword } from '../utils/helperFunctions.js';
 
 const { User } = db;
 
@@ -41,15 +41,16 @@ passport.use('local-login', new LocalStrategy({
 }));
 
 passport.use(new GoogleStrategy({
-  callbackURL: 'https://the-guitar-hub.herokuapp.com/auth/google/redirect',
+  callbackURL: config.googleStrategy.redirectUrl,
   clientID: config.googleStrategy.clientId,
   clientSecret: config.googleStrategy.secret
 }, async (accessToken, refreshToken, profile, done) => {
   try {
     const currentUser = await User.findOne({ where: { email: profile.emails[0].value } });
     if (currentUser) return done(null, { id: currentUser.id, status: 200 })
+    const username = await createUsername(User);
     const newUser = await User.create({
-      username: profile.emails[0].value.split('@')[0],
+      username,
       email: profile.emails[0].value,
       passwordSet: false
     });

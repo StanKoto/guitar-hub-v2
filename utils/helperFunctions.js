@@ -1,8 +1,9 @@
 import sign from 'jsonwebtoken/sign.js';
+import { generateUsername } from 'unique-username-generator';
 import sharp from 'sharp';
+import ImageKit from 'imagekit';
 import config from '../envVariables.cjs';
 import db from '../models/index.cjs';
-import ImageKit from 'imagekit';
 import { ErrorResponse } from '../utils/errorHandling.js';
 
 const { User } = db;
@@ -34,6 +35,13 @@ const checkPassword = (req, user, password) => {
   if (req.user) errorMessage = 'Invalid password'
   const isMatch = user.authenticate(password);
   if (!isMatch) throw new Error(errorMessage)
+};
+
+const createUsername = async (User) => {
+  const username = generateUsername('-', 3, 20);
+  const existingUser = await User.findOne({ where: { username } });
+  if (existingUser) return createUsername(User)
+  return username;
 };
 
 const checkAuthorship = (req, tip) => {
@@ -92,6 +100,7 @@ export {
   asyncHandler,
   createJwtTokenAndSetCookie, 
   checkPassword, 
+  createUsername,
   checkAuthorship, 
   checkUserStatus,
   checkResource,

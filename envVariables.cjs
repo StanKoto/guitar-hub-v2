@@ -14,7 +14,8 @@ module.exports = {
   },
   googleStrategy: {
     clientId: process.env.CLIENT_ID,
-    secret: process.env.CLIENT_SECRET
+    secret: process.env.CLIENT_SECRET,
+    redirectUrl: process.env.REDIRECT_URL
   },
   jwt: {
     secret: process.env.JWT_SECRET,
