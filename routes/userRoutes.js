@@ -24,8 +24,7 @@ userRouter.use(checkAuthentication, checkRole);
 userRouter.get('/', userManagement_get);
 userRouter.get('/new-user-form' ,newUserForm_get)
 userRouter.route('/users')
-  .get(searchResults(User, undefined, [ 
-    'email', 
+  .get(searchResults(User, undefined, [
     'password', 
     'passwordSet', 
     'resetPasswordToken', 

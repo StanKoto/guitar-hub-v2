@@ -5,9 +5,10 @@ const imageForm = document.getElementById('image-form');
 
 const titleError = { element: document.querySelector('.title.error'), errorType: 'title' };
 const contentsError = { element: document.querySelector('.contents.error'), errorType: 'contents' };
+const categoryError = { element: document.querySelector('.category.error'), errorType: 'category' };
 const imageError = { element: document.querySelector('.image.error'), errorType: 'images' };
 
-const customContentErrors = [ titleError, contentsError ];
+const customContentErrors = [ titleError, contentsError, categoryError ];
 
 const urlTemplate = location.pathname.split('/');
 urlTemplate.pop();
@@ -24,7 +25,7 @@ contentForm.addEventListener('submit', async (e) => {
   const method = 'PUT';
   const redirectUrl = 'tip-edit-form';
   let body = {};
-  body.title = contentForm.title.value;
+  body.title = contentForm.tipTitle.value;
   body.contents = contentForm.contents.value;
   if (category.length !== 0) body.category = category;
   

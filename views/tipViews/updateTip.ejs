@@ -1,8 +1,8 @@
 <%- include('../partials/header'); %>
   <main>
     <form class="custom content update form" id="contents-form">
-      <label for="title">Title</label>
-      <textarea name="title" cols="30" rows="1" maxlength="50"><%= tip.title %></textarea>
+      <label for="tipTitle">Title</label>
+      <textarea name="tipTitle" cols="30" rows="1" maxlength="50"><%= tip.title %></textarea>
       <div class="title error"></div>
       <label for="contents">Contents</label>
       <textarea name="contents" cols="30" rows="10" maxlength="5000"><%= tip.contents %></textarea>
@@ -27,6 +27,7 @@
         <input type="radio" id="category-four" name="category" value="Other topics">
         <label for="category-four">Other topics</label>
       </span>
+      <div class="category error"></div>
       <br>
       <button>Update text contents</button>
     </form>

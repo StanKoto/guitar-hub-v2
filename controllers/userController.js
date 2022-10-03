@@ -26,12 +26,12 @@ const users_post = asyncHandler(async (req, res, next) => {
 });
 
 const user_get = asyncHandler(async (req, res, next) => {
-  const user = await checkResource(req, User, [ 'password' ]);
+  const user = await checkResource(req, User, [ 'password', 'passwordSet', 'resetPasswordToken', 'resetPasswordExpire' ]);
   res.render('userViews/getUser', { title: user.username, user, path: req.baseUrl + req.path });
 });
 
 const user_delete = asyncHandler(async (req, res, next) => {
-  const user = await checkResource(req, User, [ 'password' ]);
+  const user = await checkResource(req, User);
   await user.destroy();
   if (user.id === req.user.id) {
     res.cookie('jwt', '', { maxAge: 1 });
@@ -41,12 +41,12 @@ const user_delete = asyncHandler(async (req, res, next) => {
 });
 
 const userEditForm_get = asyncHandler(async (req, res, next) => {
-  const user = await checkResource(req, User, [ 'password' ]);
+  const user = await checkResource(req, User, [ 'password', 'passwordSet', 'resetPasswordToken', 'resetPasswordExpire' ]);
   res.render('userViews/updateUser', { title: 'Update user details', user });
 });
 
 const userDetails_put = asyncHandler(async (req, res, next) => {
-  const user = await checkResource(req, User, [ 'password' ]);
+  const user = await checkResource(req, User, [ 'password', 'passwordSet', 'resetPasswordToken', 'resetPasswordExpire' ]);
   if (req.body.username) user.username = req.body.username
   if (req.body.email) user.email = req.body.email
   if (req.body.role) user.role = req.body.role
@@ -59,7 +59,7 @@ const userPassword_put = asyncHandler(async (req, res, next) => {
   const adminUser = await User.findByPk(req.user.id);
   if (!adminUser) throw new ErrorResponse(`No admin account found with id of ${req.user.id}`, 404);
   checkPassword(req, adminUser, req.body.adminPassword);
-  const user = await checkResource(req, User, [ 'password' ]);
+  const user = await checkResource(req, User, [ 'password','passwordSet', 'resetPasswordToken', 'resetPasswordExpire' ]);
   user.password = req.body.newPassword;
   await user.save();
   res.status(200).json({ user });

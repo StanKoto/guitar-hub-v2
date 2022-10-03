@@ -105,12 +105,12 @@ const resetPassword_put = asyncHandler(async (req, res, next) => {
 });
 
 const myProfile_get = asyncHandler(async (req, res, next) => {
-  const user = await checkResource(req, User, [ 'password' ]);
+  const user = await checkResource(req, User, [ 'password', 'resetPasswordToken', 'resetPasswordExpire' ]);
   res.render('authViews/myProfile', { title: 'Update my details', user });
 });
 
 const myDetails_put = asyncHandler(async (req, res, next) => {
-  const user = await checkResource(req, User, [ 'password' ]);
+  const user = await checkResource(req, User);
   if (req.body.username) user.username = req.body.username
   if (req.body.email) user.email = req.body.email
   await user.save(); 

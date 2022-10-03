@@ -22,8 +22,9 @@ const tips_get = asyncHandler(async (req, res, next) => {
 
 const tip_get = asyncHandler(async (req, res, next) => {
   const tip = await checkResource(req, Tip, undefined, { model: User, as: 'author', attributes: [ 'username', 'slug' ] } );
-  let notRated = true;
+  let notRated;
   if (req.user && (!tip.authorId || tip.authorId !== req.user.id)) {
+    notRated = true;
     const tipRatings = await tip.getRatings();
     for (const rating of tipRatings) {
       if (rating.reviewerId && rating.reviewerId === req.user.id) {
@@ -67,6 +68,7 @@ const tip_delete = asyncHandler(async (req, res, next) => {
 
 const tipEditForm_get = asyncHandler(async (req, res, next) => {
   const tip = await checkResource(req, Tip);
+  checkAuthorship(req, tip);
   res.render('tipViews/updateTip', { title: 'Update tip', tip });
 });
 
@@ -84,6 +86,7 @@ const tip_put = asyncHandler(async (req, res, next) => {
 
 const tipImages_post = asyncHandler(async (req, res, next) => {
   const tip = await checkResource(req, Tip);
+  checkAuthorship(req, tip);
   if (req.files) await processImages(req, tip);
   await tip.save();
   res.status(200).json({ success: true });
@@ -92,6 +95,7 @@ const tipImages_post = asyncHandler(async (req, res, next) => {
 const tipImages_delete = asyncHandler(async (req, res, next) => {
   const index = req.params.index;
   const tip = await checkResource(req, Tip);
+  checkAuthorship(req, tip);
   if (!tip.images) throw new ErrorResponse(`No images found for tip with id of ${tip.id}`, 404)
   await deleteOneImage(tip.images, index);
   tip.images.splice(index, 1);

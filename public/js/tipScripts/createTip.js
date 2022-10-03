@@ -14,7 +14,7 @@ form.addEventListener('submit', async (e) => {
 
   emptyErrors(customErrors);
 
-  const title = form.title.value;
+  const title = form.tipTitle.value;
   const contents = form.contents.value;
   const category = form.category.value;
   const images = document.getElementById('images');

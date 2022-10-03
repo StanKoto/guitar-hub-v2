@@ -23,7 +23,7 @@ const checkUser = asyncHandler((req, res, next) => {
         res.locals.currentUser = null;
         return next();
       }    
-      const user = await User.findByPk(decodedToken.id, { exclude: [ 'password' ] });
+      const user = await User.findByPk(decodedToken.id, { attributes: [ 'id', 'username', 'status', 'role' ] });
       if (!user) throw new ErrorResponse(`No user found with ID of ${decodedToken.id}`, 404)
       req.user = user;
       res.locals.currentUser = user;
